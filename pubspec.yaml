@@ -15,7 +15,10 @@ dependencies:
   dynamic_config_generator: ^0.4.0
   envied: ^0.5.2
   nyxx: ^6.0.2
-  nyxx_commands: ^6.0.0
+  nyxx_commands:
+    git:
+      url: https://github.com/nyxx-discord/nyxx_commands.git
+      ref: dev # branch name
   nyxx_extensions: ^4.1.0
 
 

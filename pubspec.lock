@@ -324,10 +324,11 @@ packages:
   nyxx_commands:
     dependency: "direct main"
     description:
-      name: nyxx_commands
-      sha256: "3851a2a1e77e1c7de4c05c3014276a497416bfa1e559d28d4a5a93af66c580e9"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: dev
+      resolved-ref: e2432023394f74b4b0134364d6e0866a4505a823
+      url: "https://github.com/nyxx-discord/nyxx_commands.git"
+    source: git
     version: "6.0.0"
   nyxx_extensions:
     dependency: "direct main"

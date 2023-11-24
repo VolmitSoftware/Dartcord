@@ -1,2 +1,6 @@
 
 config.json
+
+.dart_tool/
+
+.idea/libraries/
