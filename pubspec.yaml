@@ -14,7 +14,7 @@ dependencies:
   build_runner: ^2.4.6
   dynamic_config_generator: ^0.4.0
   envied: ^0.5.2
-  nyxx: 6.0.2
+  nyxx: ^6.0.2
   nyxx_commands: ^6.0.0
   nyxx_extensions: ^4.1.0
 

@@ -1,10 +1,9 @@
-// Imports will be ommitted in code samples below
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 
-final ping = ChatCommand(
-  'ping1',
-  "Get the bot's latency",
+final pingSelection = ChatCommand(
+  'pingselection',
+  "Get the bot's latency, via selection",
   (ChatContext context) async {
     final selection = await context.getSelection(
       ['Basic', 'Real', 'Gateway'],

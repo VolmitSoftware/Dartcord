@@ -1,19 +1,14 @@
 // Imports will be ommitted in code samples below
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
+import 'package:running_on_dart/utils/converters.dart';
 
-final ping3 = ChatCommand(
-  'ping3',
+final pingString = ChatCommand(
+  'pingstring',
   "Get the bot's latency",
   (
     ChatContext context, [
-    @Choices({
-      'Basic latency': 'Basic',
-      'Real latency': 'Real',
-      'Gateway latency': 'Gateway',
-    })
-    @Description('The type of latency to view')
-    String? selection,
+    @UseConverter(latencyTypeConverter) @Description('The type of latency to view') String? selection,
   ]) async {
     Duration latency;
     switch (selection) {
