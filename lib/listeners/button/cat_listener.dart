@@ -21,12 +21,14 @@ import 'package:nyxx/nyxx.dart';
 void onCatButtonListener(NyxxGateway client) {
   // This one uses Followup messages, or it will crash the bot because the response is not unique
   client.onMessageComponentInteraction.listen((event) async {
-    if (event.interaction.type == InteractionType.messageComponent && event.interaction.data.customId == "cat") {
+    if (event.interaction.type == InteractionType.messageComponent &&
+        event.interaction.data.customId == "cat") {
       print("Cat button pressed!");
       //acknowledge the interaction (NEEDED IF NON-Ephemeral (See Dog as an Example))
       await event.interaction.acknowledge();
       //reply with a a "ok!" message
-      await event.interaction.createFollowup(MessageBuilder(content: "OK!"), isEphemeral: true);
+      await event.interaction
+          .createFollowup(MessageBuilder(content: "OK!"), isEphemeral: true);
     }
   });
 }

@@ -21,7 +21,8 @@ import 'package:nyxx/nyxx.dart';
 void onDogButtonListener(NyxxGateway client) {
   // This one uses Followup messages, or it will crash the bot because the response is not unique
   client.onMessageComponentInteraction.listen((event) async {
-    if (event.interaction.type == InteractionType.messageComponent && event.interaction.data.customId == "dog") {
+    if (event.interaction.type == InteractionType.messageComponent &&
+        event.interaction.data.customId == "dog") {
       print("Dog button pressed!");
       //reply with a a "ok!" message
       await event.interaction.respond(

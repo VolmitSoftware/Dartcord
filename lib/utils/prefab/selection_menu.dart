@@ -21,7 +21,13 @@ Future<SelectMenuBuilder> dartcordSelectionMenu({
 
   // If options are null or empty, create a default option
   if (options == null || options.isEmpty) {
-    options = [dartcordSelectionMenuOption(label: 'Default Option', value: 'default_value', description: 'Default Description', isDefault: true)];
+    options = [
+      dartcordSelectionMenuOption(
+          label: 'Default Option',
+          value: 'default_value',
+          description: 'Default Description',
+          isDefault: true)
+    ];
   }
 
   return SelectMenuBuilder(

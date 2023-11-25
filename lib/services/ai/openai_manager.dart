@@ -33,7 +33,8 @@ class OpenAIManager {
   }
 
   // Method to generate an image URL using OpenAI's image model
-  Future<String?> gen_image(String prompt, int n, OpenAIImageSize size, OpenAIImageResponseFormat responseFormat) async {
+  Future<String?> gen_image(String prompt, int n, OpenAIImageSize size,
+      OpenAIImageResponseFormat responseFormat) async {
     try {
       OpenAIImageModel image = await OpenAI.instance.image.create(
         prompt: prompt,
@@ -62,7 +63,8 @@ class OpenAIManager {
   /// [responseFormat] specifies the format of the response.
   ///
   /// Returns a list of URLs of the generated image variations.
-  Future<List<String?>> varry_Image(File image, int? count, OpenAIImageSize? size, OpenAIImageResponseFormat? responseFormat) async {
+  Future<List<String?>> varry_Image(File image, int? count,
+      OpenAIImageSize? size, OpenAIImageResponseFormat? responseFormat) async {
     try {
       OpenAIImageModel imageVariations = await OpenAI.instance.image.variation(
         image: image,

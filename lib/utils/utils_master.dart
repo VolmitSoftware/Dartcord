@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:image/image.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:running_on_dart/main.dart';
 
@@ -40,5 +44,23 @@ class BotTools {
   /// Returns `true` if the message contains "Dartcord", otherwise `false`.
   static bool messageHasExact(String message) {
     return message.contains("Dartcord");
+  }
+
+  static Future<void> convertToPng(String inputPath, String outputPath) async {
+    // Read the image file
+    var file = File(inputPath);
+    List<int> fileBytes = await file.readAsBytes();
+    Uint8List uint8list = Uint8List.fromList(fileBytes);
+    Image? image = decodeImage(uint8list);
+
+    if (image == null) {
+      print('Unable to decode image');
+      return;
+    }
+
+    // Convert and save the image as a PNG with compression
+    var pngBytes = encodePng(image); // Compression level added here
+    await File(outputPath).writeAsBytes(pngBytes);
+    print('Image converted and saved as PNG');
   }
 }

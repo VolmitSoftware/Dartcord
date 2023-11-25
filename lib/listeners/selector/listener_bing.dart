@@ -22,7 +22,8 @@ import 'package:running_on_dart/utils/prefab/selection_menu_component.dart';
 
 void onBingButtonListener(NyxxGateway client) {
   client.onMessageComponentInteraction.listen((event) async {
-    if (event.interaction.type == InteractionType.messageComponent && event.interaction.data.customId == "bing") {
+    if (event.interaction.type == InteractionType.messageComponent &&
+        event.interaction.data.customId == "bing") {
       // Acknowledge the interaction (NEEDED IF NON-Ephemeral (See Dog as an Example))
       await event.interaction.acknowledge();
 

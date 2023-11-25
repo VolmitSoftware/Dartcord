@@ -21,7 +21,8 @@ Future<EmbedBuilder> dartcordEmbed({
   imageUrl ??= null;
   description ??= null;
   footerText ??= 'Made by Brian Fopiano ⚫️ ArcaneArts';
-  footerIconUrl ??= 'https://storage.googleapis.com/psycho_upload/clistogastra-landimere-premake-goddammit.heic';
+  footerIconUrl ??=
+      'https://storage.googleapis.com/psycho_upload/clistogastra-landimere-premake-goddammit.heic';
 
   return EmbedBuilder()
     ..title = title
@@ -29,8 +30,12 @@ Future<EmbedBuilder> dartcordEmbed({
     ..color = DiscordColor.parseHexString(color)
     ..timestamp = timestamp == true ? DateTime.now() : null
     ..fields = fields
-    ..thumbnail = thumbnailUrl == null ? null : EmbedThumbnailBuilder(url: Uri.parse(thumbnailUrl))
-    ..image = imageUrl == null ? null : EmbedImageBuilder(url: Uri.parse(imageUrl))
+    ..thumbnail = thumbnailUrl == null
+        ? null
+        : EmbedThumbnailBuilder(url: Uri.parse(thumbnailUrl))
+    ..image =
+        imageUrl == null ? null : EmbedImageBuilder(url: Uri.parse(imageUrl))
     ..description = description
-    ..footer = EmbedFooterBuilder(text: footerText, iconUrl: Uri.parse(footerIconUrl));
+    ..footer =
+        EmbedFooterBuilder(text: footerText, iconUrl: Uri.parse(footerIconUrl));
 }

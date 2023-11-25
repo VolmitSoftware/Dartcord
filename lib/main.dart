@@ -42,7 +42,10 @@ void main() async {
   final commands = CommandsPlugin(prefix: mentionOr((_) => '!'));
   autocrat(commands); // Load all commands
   var discordToken = Configurator.instance.discordToken;
-  nyxxBotClient = await Nyxx.connectGateway(discordToken, GatewayIntents.allUnprivileged | GatewayIntents.messageContent, options: GatewayClientOptions(plugins: [logging, cliIntegration, commands]));
+  nyxxBotClient = await Nyxx.connectGateway(discordToken,
+      GatewayIntents.allUnprivileged | GatewayIntents.messageContent,
+      options:
+          GatewayClientOptions(plugins: [logging, cliIntegration, commands]));
   botUser = await nyxxBotClient.users.fetchCurrentUser();
   registerListeners(nyxxBotClient, commands); // Load all Listeners
   OpenAIManager.instance.initialize(Configurator.instance.openAiToken);

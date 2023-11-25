@@ -22,7 +22,8 @@ import 'package:running_on_dart/utils/utils_master.dart';
 void onHiMessageListener(NyxxGateway client) {
   client.onMessageCreate.listen((event) async {
     //Simplified message parsing, and bot checking!
-    if (BotTools.messageHas(event.message.content) && !await BotTools.isBot(event)) {
+    if (BotTools.messageHas(event.message.content) &&
+        !await BotTools.isBot(event)) {
       await event.message.manager.create(MessageBuilder(
         content: "I'm Dartcord!",
         replyId: event.message.id,

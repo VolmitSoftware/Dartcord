@@ -21,18 +21,62 @@ import 'package:nyxx_commands/nyxx_commands.dart';
 
 void onCommandErrorListener(CommandsPlugin commands) {
   commands.onCommandError.listen((error) async {
-    switch (error.runtimeType) {
-      case ConverterFailedException:
-        ConverterFailedException converterError = error as ConverterFailedException;
-        if (converterError.context is InteractiveContext) {
-          final InteractiveContext context = converterError.context as InteractiveContext;
+    ConverterFailedException converterError = error as ConverterFailedException;
+    if (converterError.context is InteractiveContext) {
+      final InteractiveContext context =
+          converterError.context as InteractiveContext;
+      switch (error.runtimeType) {
+        case CheckFailedException:
+          CheckFailedException checkError = error as CheckFailedException;
+          if (checkError.failed is CooldownCheck) {
+            await context.respond(
+                MessageBuilder(
+                  content:
+                      "Command on cooldown. Please wait a few moments and try again.",
+                ),
+                level: ResponseLevel.private);
+          } else {
+            await context.respond(MessageBuilder(
+                content:
+                    "You can't use this command! Check that you have permission or contact a developer for more information."));
+          }
+          break;
+
+        case NotEnoughArgumentsException:
           await context.respond(MessageBuilder(
-            content: 'Invalid input: `${converterError.input.remaining}`',
-          ));
-        }
-        break;
-      default:
-        print('Uncaught error: $error');
+              content:
+                  "Not enough arguments. Please provide the required arguments and try again."));
+          break;
+
+        case BadInputException:
+          await context.respond(MessageBuilder(
+              content:
+                  "Couldn't parse input. Please check your input and try again."));
+          break;
+
+        case UncaughtException:
+          UncaughtException uncaughtError = error as UncaughtException;
+          await context.respond(MessageBuilder(
+              content: "Uncaught exception: ${uncaughtError.exception}"));
+          print('Uncaught exception in command: ${uncaughtError.exception}');
+          break;
+
+        case ConverterFailedException:
+          ConverterFailedException converterError = error;
+          if (converterError.context is InteractiveContext) {
+            final InteractiveContext iContext =
+                converterError.context as InteractiveContext;
+            await iContext.respond(MessageBuilder(
+              content: 'Invalid input: `${converterError.input.remaining}`',
+            ));
+          }
+          break;
+        default:
+          context.respond(MessageBuilder(
+              content:
+                  "An unknown error occurred. Please contact a developer for more information."));
+          print('Uncaught error: $error');
+      }
     }
   });
 }

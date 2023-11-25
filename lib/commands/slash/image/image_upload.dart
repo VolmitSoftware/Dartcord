@@ -19,43 +19,71 @@
 import 'dart:io';
 
 import 'package:dart_openai/dart_openai.dart';
+import 'package:fast_log/fast_log.dart';
 import 'package:http/http.dart' as http;
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/services/ai/openai_manager.dart';
 import 'package:running_on_dart/utils/prefab/embed.dart';
+import 'package:running_on_dart/utils/utils_master.dart';
 
-final image_vary = ChatCommand('ai_image_vary', "a copper for your thoughts?", (ChatContext context, [@attachmentConverter @Description('Ultimately, just an image Upload') Attachment? attachment]) async {
+final image_vary =
+    ChatCommand('ai_image_vary', "Upload an image to see an AI remake it!",
+        (ChatContext context,
+            [@attachmentConverter
+            @Description('4MB Image upload [PNG, JPG, JPEG, and WEBP]')
+            Attachment? attachment]) async {
+  verbose("Command invoked: ai_image_vary");
+
   if (attachment == null) {
-    await context.respond(MessageBuilder(content: "No image provided."), level: ResponseLevel.private);
+    verbose("No attachment provided in the command.");
+    await context.respond(MessageBuilder(content: "No image provided."),
+        level: ResponseLevel.private);
     return;
   }
+
+  verbose("Attachment received: ${attachment.url}");
 
   // Download the attachment
   var response = await http.get(Uri.parse(attachment.url.toString()));
   if (response.statusCode != 200) {
-    await context.respond(MessageBuilder(content: "Error downloading image."), level: ResponseLevel.private);
+    error("Failed to download the image from the provided URL.");
+    await context.respond(MessageBuilder(content: "Error downloading image."),
+        level: ResponseLevel.private);
     return;
   }
+  verbose("Image successfully downloaded.");
 
-  // Define the file path
-  String localFilePath = './image.png'; // Saves the file in the current working directory
+  // Define file paths
+  String localFilePath = './image.png';
 
-  // Create the directory if it doesn't exist
+  // Directory management
   var directory = Directory(localFilePath).parent;
   if (!await directory.exists()) {
+    verbose("Creating directory: ${directory.path}");
     await directory.create(recursive: true);
   }
 
-  // Save the file locally
+  // Save the downloaded file locally
   File file = File(localFilePath);
   await file.writeAsBytes(response.bodyBytes);
+  verbose("Downloaded image saved locally.");
+
+  // Convert to PNG
+  await BotTools.convertToPng(localFilePath, localFilePath);
+  verbose("Image converted to PNG format.");
 
   // Generate image variations
-  List<String?> imageUrl = await OpenAIManager.instance.varry_Image(file, 1, OpenAIImageSize.size1024, OpenAIImageResponseFormat.url);
+  File convertedFile = File(localFilePath);
+  List<String?> imageUrl = await OpenAIManager.instance.varry_Image(
+      convertedFile,
+      1,
+      OpenAIImageSize.size1024,
+      OpenAIImageResponseFormat.url);
 
-  print(imageUrl);
-  //Using Custom Embed
+  info("Generated AI image URL: ${imageUrl.first}");
+
+  // Using Custom Embed
   var embed = await dartcordEmbed(fields: [
     EmbedFieldBuilder(
       name: "Behold",
@@ -63,8 +91,12 @@ final image_vary = ChatCommand('ai_image_vary', "a copper for your thoughts?", (
       isInline: true,
     )
   ], imageUrl: imageUrl[0] ?? '', thumbnailUrl: attachment.url.toString());
-  await context.respond(MessageBuilder(embeds: [embed]), level: ResponseLevel.private);
+  await context.respond(MessageBuilder(embeds: [embed]),
+      level: ResponseLevel.private);
+  verbose("Response sent with AI-generated image.");
 
-  //delete the file
+  // Delete the files
   await file.delete();
+  await convertedFile.delete();
+  verbose("Temporary files deleted.");
 });
