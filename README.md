@@ -49,6 +49,16 @@ Dartcord handles the following events:
 
 Add additional event listeners in `dictator.dart`.
 
+## Library Usage info:
+
+
+### Nyxx is literally the core fundament of this project, please if you dont use mine, look at their api, docs, and bot for integration on dart bot dynamics.
+
+- [Nyxx](https://github.com/nyxx-discord/running_on_dart)
+- [Nyxx's Bot](https://github.com/nyxx-discord/running_on_dart)
+- [Nyxx Api Documentation](https://nyxx.l7ssha.xyz/docs/intro/)
+- ...
+
 ## Contributing
 
 Pull requests welcome! Feel free to open issues for any bugs or ideas for improvements.
