@@ -23,13 +23,13 @@ final buttonDemo = ChatCommand(
         break;
       case 'TWO':
         buttons
-          ..add(dartcordButton(label: "One!", style: ButtonStyle.secondary, customId: "one"))
-          ..add(dartcordButton(label: "Two!", style: ButtonStyle.secondary, customId: "two"));
+          ..add(dartcordButton(label: "One!", style: ButtonStyle.secondary, customId: "cat"))
+          ..add(dartcordButton(label: "Two!", style: ButtonStyle.secondary, customId: "bing"));
         break;
       case 'THREE':
         buttons
-          ..add(dartcordButton(label: "One!", style: ButtonStyle.secondary, customId: "one"))
-          ..add(dartcordButton(label: "Two!", style: ButtonStyle.secondary, customId: "two"))
+          ..add(dartcordButton(label: "One!", style: ButtonStyle.secondary, customId: "cat"))
+          ..add(dartcordButton(label: "Two!", style: ButtonStyle.secondary, customId: "bing"))
           ..add(dartcordButton(label: "Dog!", style: ButtonStyle.secondary, customId: "dog"));
         break;
       default:
