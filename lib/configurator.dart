@@ -7,7 +7,6 @@ class Configurator {
   String discordToken;
   String botImageURL;
   String botColor;
-  String adminControllerRoleId;
   String botCompanyName;
   String botPrefix;
   double xpBaseMultiplier;
@@ -19,7 +18,6 @@ class Configurator {
     required this.discordToken,
     required this.botImageURL,
     required this.botColor,
-    required this.adminControllerRoleId,
     required this.botCompanyName,
     required this.botPrefix,
     required this.xpBaseMultiplier,
@@ -33,7 +31,6 @@ class Configurator {
       discordToken: json['discord_token'],
       botImageURL: json['botImageURL'],
       botColor: json['botColor'],
-      adminControllerRoleId: json['adminControllerRoleId'],
       botCompanyName: json['botCompanyName'],
       botPrefix: json['botPrefix'],
       xpBaseMultiplier: json['xpBaseMultiplier'].toDouble(),

@@ -2,7 +2,6 @@
   "discord_token": "RENAME THE FILE TO config.json THEN OUT YOUR TOKEN HERE",
   "botImageURL": "https://cdn.discordapp.com/avatars/173261518572486656/a_63b6f52a118e915f11bc771985a078c8.gif?quality=lossless&size=4096",
   "botColor": "#003865",
-  "adminControllerRoleId": "000000000000000000000",
   "botCompanyName": "Volmit Software",
   "botPrefix": "",
   "xpBaseMultiplier": 1.0,

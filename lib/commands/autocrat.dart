@@ -32,8 +32,8 @@ void autocrat(CommandsPlugin commands) {
   commands..addCommand(embed);
   commands..addCommand(cat);
   commands..addCommand(buttonDemo);
-  commands..addCommand(selectionMenuDemo)
+  commands..addCommand(selectionMenuDemo);
 
-      // Add more commands here
-      ;
+  // Add more commands here
+  ;
 }
