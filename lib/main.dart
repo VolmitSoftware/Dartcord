@@ -26,6 +26,9 @@ import 'commands/autocrat.dart';
 import 'configurator.dart';
 import 'listeners/dictator.dart';
 
+late NyxxGateway nyxxBotClient;
+late User botUser;
+
 Future<void> initializeConfig() async {
   var configFile = File('config.json');
   var contents = await configFile.readAsString();
@@ -38,7 +41,7 @@ void main() async {
   final commands = CommandsPlugin(prefix: mentionOr((_) => '!'));
   autocrat(commands); // Load all commands
   var discordToken = Configurator.instance.discordToken;
-  final client = await Nyxx.connectGateway(discordToken, GatewayIntents.allUnprivileged | GatewayIntents.messageContent, options: GatewayClientOptions(plugins: [logging, cliIntegration, commands]));
-  final botUser = await client.users.fetchCurrentUser();
-  registerListeners(client, commands); // Load all Listeners
+  nyxxBotClient = await Nyxx.connectGateway(discordToken, GatewayIntents.allUnprivileged | GatewayIntents.messageContent, options: GatewayClientOptions(plugins: [logging, cliIntegration, commands]));
+  botUser = await nyxxBotClient.users.fetchCurrentUser();
+  registerListeners(nyxxBotClient, commands); // Load all Listeners
 }

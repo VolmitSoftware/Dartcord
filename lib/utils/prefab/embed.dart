@@ -1,5 +1,5 @@
 import 'package:nyxx/nyxx.dart';
-import 'package:running_on_dart/utils/roryCat.dart';
+import 'package:running_on_dart/utils/rory_cat.dart';
 
 Future<EmbedBuilder> dartcordEmbed({
   required List<EmbedFieldBuilder> fields,

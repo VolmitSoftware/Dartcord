@@ -17,23 +17,16 @@
  */
 
 import 'package:nyxx/nyxx.dart';
-import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/listeners/button/dog_listener.dart';
-import 'package:running_on_dart/listeners/ordinator/listener_cmd.dart';
-import 'package:running_on_dart/listeners/other/listener_hello.dart';
-import 'package:running_on_dart/listeners/selector/listener_bing.dart';
+import 'package:running_on_dart/utils/utils_master.dart';
 
-import 'button/cat_listener.dart';
-import 'ordinator/listener_cmd_error.dart';
-import 'ordinator/listener_ready.dart';
-
-void registerListeners(NyxxGateway client, CommandsPlugin commands) {
-  onReadyListener(client);
-  onCommandErrorListener(commands);
-  onCommandListener(commands);
-  onCatButtonListener(client);
-  onDogButtonListener(client);
-  onBingButtonListener(client);
-  onHiMessageListener(client);
-  // Add more listener registrations here
+void onHiMessageListener(NyxxGateway client) {
+  client.onMessageCreate.listen((event) async {
+    //Simplified message parsing, and bot checking!
+    if (BotTools.messageHas(event.message.content) && !await BotTools.isBot(event)) {
+      await event.message.manager.create(MessageBuilder(
+        content: "I'm Dartcord!",
+        replyId: event.message.id,
+      ));
+    }
+  });
 }
