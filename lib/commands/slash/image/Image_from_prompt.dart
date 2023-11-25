@@ -16,35 +16,22 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Imports will be ommitted in code samples below
+import 'package:dart_openai/dart_openai.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/utils/converter.dart';
+import 'package:running_on_dart/services/ai/openai_manager.dart';
+import 'package:running_on_dart/utils/prefab/embed.dart';
 
-final pingString = ChatCommand(
-  'pingstring',
-  "Get the bot's latency",
-  (
-    ChatContext context, [
-    @UseConverter(latencyTypeConverter) @Description('The type of latency to view') String? selection,
-  ]) async {
-    Duration latency;
-    switch (selection) {
-      case 'Basic':
-        latency = context.client.httpHandler.latency;
-        break;
-      case 'Real':
-        latency = context.client.httpHandler.realLatency;
-        break;
-      case 'Gateway':
-        latency = context.client.gateway.latency;
-        break;
-      default:
-        throw StateError('Unexpected selection $selection');
-    }
+final image_prompt = ChatCommand('ai_image', "an image for your thoughts?", (ChatContext context, [@Description('Get an image from the prompte that you say here!') String? prompt]) async {
+  String? imageUrl = await OpenAIManager.instance.gen_image(
+    prompt ?? 'a Nebelung cat sitting on a carved pumpkin',
+    1,
+    OpenAIImageSize.size1024,
+    OpenAIImageResponseFormat.url,
+  );
 
-    final formattedLatency = (latency.inMicroseconds / Duration.microsecondsPerMillisecond).toStringAsFixed(3);
-
-    await context.respond(MessageBuilder(content: '${formattedLatency}ms'));
-  },
-);
+  print(imageUrl);
+  //Using Custom Embed
+  var embed = await dartcordEmbed(fields: [EmbedFieldBuilder(name: "Prompt: ", value: prompt.toString(), isInline: true)], imageUrl: imageUrl);
+  await context.respond(MessageBuilder(embeds: [embed]));
+});

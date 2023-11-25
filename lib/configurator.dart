@@ -11,7 +11,7 @@ class Configurator {
   String botPrefix;
   double xpBaseMultiplier;
   String botOwnerID;
-  String catApiToken;
+  String openAiToken;
 
   // Private constructor
   Configurator._({
@@ -22,7 +22,7 @@ class Configurator {
     required this.botPrefix,
     required this.xpBaseMultiplier,
     required this.botOwnerID,
-    required this.catApiToken,
+    required this.openAiToken,
   });
 
   // Factory constructor for creating instance from JSON
@@ -35,7 +35,7 @@ class Configurator {
       botPrefix: json['botPrefix'],
       xpBaseMultiplier: json['xpBaseMultiplier'].toDouble(),
       botOwnerID: json['botOwnerID'],
-      catApiToken: json['catApiToken'],
+      openAiToken: json['openAiToken'],
     );
     return _instance!;
   }

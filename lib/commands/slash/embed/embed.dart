@@ -20,7 +20,7 @@ import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/configurator.dart';
 
-final embed = ChatCommand('embed', 'Creates an embed with provided title and footer', (ChatContext context, [@Description("This is where i put descriptions") String? title, @Description("Timestamp?") bool? timestamp, @Description("This is another one!") String? footer]) async {
+final embed = ChatCommand('embed_embed', 'Creates an embed with provided title and footer', (ChatContext context, [@Description("This is where i put descriptions") String? title, @Description("Timestamp?") bool? timestamp, @Description("This is another one!") String? footer]) async {
   title = 'Default Title';
   footer ??= 'Default Footer';
   var username = context.user.username;

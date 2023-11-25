@@ -1,5 +1,4 @@
 import 'package:nyxx/nyxx.dart';
-import 'package:running_on_dart/utils/rory_cat.dart';
 
 Future<EmbedBuilder> dartcordEmbed({
   required List<EmbedFieldBuilder> fields,
@@ -14,15 +13,15 @@ Future<EmbedBuilder> dartcordEmbed({
   String? footerText,
   String? footerIconUrl,
 }) async {
-  title ??= 'I Like Cats';
-  authorName ??= 'Rory, the cat';
+  title ??= 'Im an Embed!';
+  authorName ??= 'Someone, Far Away';
   authorUrl ??= 'https://volmit.com/';
   color ??= '#003865';
-  thumbnailUrl ??= await fetchCatImageUrl();
-  String imageUrl = await fetchCatImageUrl();
-  description ??= 'Mrew, Meow, Mewooww!';
-  footerText ??= '[insert cat paws here]]';
-  footerIconUrl ??= 'https://volmit.com/';
+  thumbnailUrl ??= null;
+  imageUrl ??= null;
+  description ??= null;
+  footerText ??= 'Made by Brian Fopiano ⚫️ ArcaneArts';
+  footerIconUrl ??= 'https://storage.googleapis.com/psycho_upload/clistogastra-landimere-premake-goddammit.heic';
 
   return EmbedBuilder()
     ..title = title
@@ -30,8 +29,8 @@ Future<EmbedBuilder> dartcordEmbed({
     ..color = DiscordColor.parseHexString(color)
     ..timestamp = timestamp == true ? DateTime.now() : null
     ..fields = fields
-    ..thumbnail = EmbedThumbnailBuilder(url: Uri.parse(thumbnailUrl))
-    ..image = EmbedImageBuilder(url: Uri.parse(imageUrl))
+    ..thumbnail = thumbnailUrl == null ? null : EmbedThumbnailBuilder(url: Uri.parse(thumbnailUrl))
+    ..image = imageUrl == null ? null : EmbedImageBuilder(url: Uri.parse(imageUrl))
     ..description = description
     ..footer = EmbedFooterBuilder(text: footerText, iconUrl: Uri.parse(footerIconUrl));
 }

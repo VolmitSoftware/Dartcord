@@ -17,22 +17,22 @@
  */
 
 import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/commands/slash/button/command_button_demo.dart';
-import 'package:running_on_dart/commands/slash/button/selection_menu_demo.dart';
-import 'package:running_on_dart/commands/slash/embed/cat_embed.dart';
+import 'package:running_on_dart/commands/slash/button/button_demo.dart';
+import 'package:running_on_dart/commands/slash/button/button_selection_demo.dart';
 import 'package:running_on_dart/commands/slash/embed/embed.dart';
-import 'package:running_on_dart/commands/slash/ping/command_ping_choices.dart';
-import 'package:running_on_dart/commands/slash/ping/command_ping_selection.dart';
-import 'package:running_on_dart/commands/slash/ping/command_ping_string.dart';
+import 'package:running_on_dart/commands/slash/embed/embed_cat.dart';
+import 'package:running_on_dart/commands/slash/image/Image_from_prompt.dart';
+import 'package:running_on_dart/commands/slash/image/image_upload.dart';
+import 'package:running_on_dart/commands/slash/ping/ping_collection.dart';
 
 void autocrat(CommandsPlugin commands) {
-  commands..addCommand(pingSelection);
-  commands..addCommand(pingString);
-  commands..addCommand(pingChoices);
+  commands..addCommand(pingCluster);
   commands..addCommand(embed);
   commands..addCommand(cat);
   commands..addCommand(buttonDemo);
   commands..addCommand(selectionMenuDemo);
+  commands..addCommand(image_vary);
+  commands..addCommand(image_prompt);
 
   // Add more commands here
   ;

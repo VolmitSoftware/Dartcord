@@ -21,6 +21,7 @@ import 'dart:io';
 
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
+import 'package:running_on_dart/services/ai/openai_manager.dart';
 
 import 'commands/autocrat.dart';
 import 'configurator.dart';
@@ -44,4 +45,5 @@ void main() async {
   nyxxBotClient = await Nyxx.connectGateway(discordToken, GatewayIntents.allUnprivileged | GatewayIntents.messageContent, options: GatewayClientOptions(plugins: [logging, cliIntegration, commands]));
   botUser = await nyxxBotClient.users.fetchCurrentUser();
   registerListeners(nyxxBotClient, commands); // Load all Listeners
+  OpenAIManager.instance.initialize(Configurator.instance.openAiToken);
 }
