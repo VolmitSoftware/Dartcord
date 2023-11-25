@@ -153,22 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
-  dynamic_config_generator:
-    dependency: "direct main"
-    description:
-      name: dynamic_config_generator
-      sha256: c187197f00866e88b83ce44ef597115ed6ad780f3d8ea6d5bea043025cc7eebe
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
-  envied:
-    dependency: "direct main"
-    description:
-      name: envied
-      sha256: c4af8bb99203d7f216cea41f2ec70874f9dd826b2a5782cdc5bd25389c5adcc1
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.2"
   eterl:
     dependency: transitive
     description:
