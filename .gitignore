@@ -4,3 +4,5 @@ config.json
 .dart_tool/
 
 .idea/libraries/
+
+.idea/copyright/

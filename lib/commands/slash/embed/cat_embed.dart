@@ -18,21 +18,9 @@
 
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
+import 'package:running_on_dart/utils/prefab/embed.dart';
 
-void onCommandErrorListener(CommandsPlugin commands) {
-  commands.onCommandError.listen((error) async {
-    switch (error.runtimeType) {
-      case ConverterFailedException:
-        ConverterFailedException converterError = error as ConverterFailedException;
-        if (converterError.context is InteractiveContext) {
-          final InteractiveContext context = converterError.context as InteractiveContext;
-          await context.respond(MessageBuilder(
-            content: 'Invalid input: `${converterError.input.remaining}`',
-          ));
-        }
-        break;
-      default:
-        print('Uncaught error: $error');
-    }
-  });
-}
+final cat = ChatCommand('cat', "Le' Mew meow!", (ChatContext context) async {
+  var embed = await dartcordEmbed(fields: [EmbedFieldBuilder(name: "Behold", value: "The cat!", isInline: true)]);
+  await context.respond(MessageBuilder(embeds: [embed]), level: ResponseLevel.private);
+});

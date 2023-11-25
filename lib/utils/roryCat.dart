@@ -16,23 +16,22 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:nyxx/nyxx.dart';
-import 'package:nyxx_commands/nyxx_commands.dart';
+import 'dart:convert';
+import 'dart:math';
 
-void onCommandErrorListener(CommandsPlugin commands) {
-  commands.onCommandError.listen((error) async {
-    switch (error.runtimeType) {
-      case ConverterFailedException:
-        ConverterFailedException converterError = error as ConverterFailedException;
-        if (converterError.context is InteractiveContext) {
-          final InteractiveContext context = converterError.context as InteractiveContext;
-          await context.respond(MessageBuilder(
-            content: 'Invalid input: `${converterError.input.remaining}`',
-          ));
-        }
-        break;
-      default:
-        print('Uncaught error: $error');
-    }
-  });
+import 'package:http/http.dart' as http;
+
+Future<String> fetchCatImageUrl() async {
+  Random random = Random();
+  int catId = random.nextInt(123) + 1; // Assuming IDs start from 1 to 124
+  var response = await http.get(Uri.parse('https://rory.cat/purr/$catId'));
+
+  if (response.statusCode == 200) {
+    var data = json.decode(response.body);
+    print("Cat image URL: ${data['url']}");
+    return data['url']; // Assuming 'url' is the key for the image URL
+  } else {
+    // Handle the case when the API does not respond as expected
+    throw Exception('Failed to load cat image');
+  }
 }

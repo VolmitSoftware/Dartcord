@@ -23,21 +23,22 @@ import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 
 import 'commands/autocrat.dart';
+import 'configurator.dart';
 import 'listeners/dictator.dart';
 
-Future<Map<String, dynamic>> loadConfig() async {
+Future<void> initializeConfig() async {
   var configFile = File('config.json');
   var contents = await configFile.readAsString();
-  return json.decode(contents);
+  Map<String, dynamic> configData = json.decode(contents);
+  Configurator.fromJson(configData);
 }
 
 void main() async {
+  await initializeConfig();
   final commands = CommandsPlugin(prefix: mentionOr((_) => '!'));
   autocrat(commands); // Load all commands
-
-  var config = await loadConfig();
-  var discordToken = config['discord_token'];
+  var discordToken = Configurator.instance.discordToken;
   final client = await Nyxx.connectGateway(discordToken, GatewayIntents.allUnprivileged | GatewayIntents.messageContent, options: GatewayClientOptions(plugins: [logging, cliIntegration, commands]));
   final botUser = await client.users.fetchCurrentUser();
-  registerListeners(client, commands); // Register all listeners
+  registerListeners(client, commands); // Load all Listeners
 }
