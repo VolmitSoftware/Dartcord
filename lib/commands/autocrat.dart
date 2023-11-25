@@ -17,6 +17,7 @@
  */
 
 import 'package:nyxx_commands/nyxx_commands.dart';
+import 'package:running_on_dart/commands/slash/button/command_button_demo.dart';
 import 'package:running_on_dart/commands/slash/embed/cat_embed.dart';
 import 'package:running_on_dart/commands/slash/embed/embed.dart';
 import 'package:running_on_dart/commands/slash/ping/command_ping_choices.dart';
@@ -29,6 +30,7 @@ void autocrat(CommandsPlugin commands) {
   commands..addCommand(pingChoices);
   commands..addCommand(embed);
   commands..addCommand(cat);
+  commands..addCommand(buttonDemo);
 
   // Add more commands here
   ;

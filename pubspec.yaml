@@ -19,7 +19,7 @@ dependencies:
   nyxx_commands:
     git:
       url: https://github.com/nyxx-discord/nyxx_commands.git
-      ref: dev # branch name
+      ref: dev
   nyxx_extensions: ^4.1.0
 
 

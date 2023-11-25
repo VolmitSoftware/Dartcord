@@ -18,8 +18,10 @@
 
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
+import 'package:running_on_dart/listeners/buttons/dog_listener.dart';
 import 'package:running_on_dart/listeners/ordinator/listener_cmd.dart';
 
+import 'buttons/cat_listener.dart';
 import 'ordinator/listener_cmd_error.dart';
 import 'ordinator/listener_ready.dart';
 
@@ -27,5 +29,7 @@ void registerListeners(NyxxGateway client, CommandsPlugin commands) {
   onReadyListener(client);
   onCommandErrorListener(commands);
   onCommandListener(commands);
+  onCatButtonListener(client);
+  onDogButtonListener(client);
   // Add more listener registrations here
 }

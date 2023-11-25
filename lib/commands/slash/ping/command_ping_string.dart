@@ -19,7 +19,7 @@
 // Imports will be ommitted in code samples below
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/utils/converters.dart';
+import 'package:running_on_dart/utils/converter.dart';
 
 final pingString = ChatCommand(
   'pingstring',

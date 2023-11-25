@@ -17,11 +17,18 @@
  */
 
 import 'package:nyxx/nyxx.dart';
-import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/utils/prefab/embed.dart';
 
-final cat = ChatCommand('cat', "Le' Mew meow!", (ChatContext context) async {
-  //Using Custom Embed
-  var embed = await dartcordEmbed(fields: [EmbedFieldBuilder(name: "Behold", value: "The cat!", isInline: true)]);
-  await context.respond(MessageBuilder(embeds: [embed]), level: ResponseLevel.private);
-});
+void onDogButtonListener(NyxxGateway client) {
+  // This one uses Followup messages, or it will crash the bot because the response is not unique
+  client.onMessageComponentInteraction.listen((event) async {
+    if (event.interaction.type == InteractionType.messageComponent && event.interaction.data.customId == "dog") {
+      print("Dog button pressed!");
+      //reply with a a "ok!" message
+      await event.interaction.respond(
+          MessageBuilder(
+            content: "OK!",
+          ),
+          isEphemeral: true);
+    }
+  });
+}
