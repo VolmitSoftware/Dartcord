@@ -24,8 +24,9 @@ import 'package:http/http.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/services/ai/openai_manager.dart';
+import 'package:running_on_dart/utils/discord_extentions.dart';
+import 'package:running_on_dart/utils/image_manipulation.dart';
 import 'package:running_on_dart/utils/prefab/embed.dart';
-import 'package:running_on_dart/utils/utils_master.dart';
 
 final image_edit = ChatCommand(
     'ai_image_edit', "Upload an image to see an AI remake it!",
@@ -34,10 +35,20 @@ final image_edit = ChatCommand(
         @Description(
             '4MB Image upload [PNG, JPG, JPEG, and WEBP] (THE IMAGE YOU WANT EDITED)')
         Attachment? attachment,
-        @Description(
-            '4MB Image upload [PNG, JPG, JPEG, and WEBP] (THE MASK FOR THE IMAGE)')
-        Attachment? mask,
-        @Description('The prompt to use for the AI') String? prompt]) async {
+        @Description('This is the Mask for the image (Masked = Changed)')
+        @Choices({
+          'MaskBottom': "BOTTOM_MASK",
+          'MaskTop': "TOP_MASK",
+          'MaskLeft': "LEFT_MASK",
+          'MaskRight': "RIGHT_MASK",
+          'MaskInner': "INNER_MASK",
+          'MaskOuter': "OUTER_MASK",
+          'EmptyMask (No change)': "EMPTY_MASK",
+          'FullMask (Full Change)': "FULL_MASK"
+        })
+        String? maskFormat,
+        @Description('This is the prompt for the AI to use')
+        String? prompt]) async {
   verbose("Command invoked: ai_image_vary");
 
   if (attachment == null) {
@@ -47,15 +58,14 @@ final image_edit = ChatCommand(
     return;
   }
 
-  if (mask == null) {
-    verbose("No attachment provided in the command.");
-    await context.respond(MessageBuilder(content: "No image provided."),
+  if (maskFormat == null) {
+    verbose("No Mask Selected");
+    await context.respond(MessageBuilder(content: "No mask provided."),
         level: ResponseLevel.private);
     return;
   }
 
   verbose("Attachment received: ${attachment.url}");
-  verbose("Attachment received: ${mask.url}");
 
   // Download the attachment
   var response = await get(Uri.parse(attachment.url.toString()));
@@ -65,20 +75,16 @@ final image_edit = ChatCommand(
         level: ResponseLevel.private);
     return;
   }
-  var responseMask = await get(Uri.parse(mask.url.toString()));
-  if (responseMask.statusCode != 200) {
-    error("Failed to download the image from the provided URL.");
-    await context.respond(MessageBuilder(content: "Error downloading image."),
-        level: ResponseLevel.private);
-    return;
-  }
+
   verbose("Image successfully downloaded.");
 
   // Define file paths
-  String localMaskPath = './image-mask.png';
-  String localFilePath = './image.png';
-  String convertedPath = './converted.png';
-  String convertedPathMask = './converted-mask.png';
+  String maskPath = ImageUtils.maskMapString[maskFormat]!;
+  String localFilePath = DUtil.snowflakePath(context.user) + "image.png";
+  String convertedPath =
+      DUtil.snowflakePath(context.user) + "image-converted.png";
+  String convertedPathMask =
+      DUtil.snowflakePath(context.user) + "mask-converted.png";
 
   // Directory management
   var directory = Directory(localFilePath).parent;
@@ -87,27 +93,18 @@ final image_edit = ChatCommand(
     await directory.create(recursive: true);
   }
 
-  var directoryMask = Directory(localMaskPath).parent;
-  if (!await directoryMask.exists()) {
-    verbose("Creating directory: ${directoryMask.path}");
-    await directoryMask.create(recursive: true);
-  }
-
   // Save the downloaded files locally
   File file = File(localFilePath);
-  File fileMask = File(localMaskPath);
   await file.writeAsBytes(response.bodyBytes);
-  await fileMask.writeAsBytes(responseMask.bodyBytes);
   verbose("Downloaded image saved locally.");
 
   // Convert to PNG
-  await BotTools.convertToPng(localFilePath, convertedPath, ImageFormat.RGBA);
-  await BotTools.convertToPng(
-      localMaskPath, convertedPathMask, ImageFormat.RGBA);
-  verbose("Image converted to PNG format.");
+  await ImageUtils.convertToPng(localFilePath, convertedPath, ImageFormat.RGBA);
+  await ImageUtils.convertToPng(maskPath, convertedPathMask, ImageFormat.RGBA);
+  verbose("Image(s) converted to PNG/Chromatic format.");
 
   // Match the image and mask
-  await BotTools.imageResMatcher(convertedPath, convertedPathMask);
+  await ImageUtils.imageResMatcher(convertedPath, convertedPathMask);
 
   // Generate image variations
   File convertedFile = File(convertedPath);
@@ -124,8 +121,7 @@ final image_edit = ChatCommand(
 
   // Check if any image URL was received
   if (imageUrls.any((url) => url != null)) {
-    info(
-        "Generated AI image URLs: ${imageUrls.where((url) => url != null).join(', ')}");
+    info("Generated URLs: ${imageUrls.where((url) => url != null).join(', ')}");
 
     // Using Custom Embeds for each image
     List<EmbedBuilder> embeds = [];
@@ -157,7 +153,6 @@ final image_edit = ChatCommand(
   try {
     await file.delete();
     await convertedFile.delete();
-    await fileMask.delete();
     await convertedFileMask.delete();
     verbose("Temporary files deleted.");
   } catch (e) {

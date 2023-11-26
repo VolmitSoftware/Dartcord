@@ -21,6 +21,7 @@ import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 
 void onCommandErrorListener(CommandsPlugin commands) {
+  verbose('Registering command error listener');
   commands.onCommandError.listen((e) async {
     ConverterFailedException converterError = e as ConverterFailedException;
     if (converterError.context is InteractiveContext) {

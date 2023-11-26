@@ -20,6 +20,7 @@ import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 
 void onCatButtonListener(NyxxGateway client) {
+  verbose("Registering Cat button listener");
   // This one uses Followup messages, or it will crash the bot because the response is not unique
   client.onMessageComponentInteraction.listen((event) async {
     if (event.interaction.type == InteractionType.messageComponent &&

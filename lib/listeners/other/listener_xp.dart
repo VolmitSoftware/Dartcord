@@ -18,20 +18,26 @@
 
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
+import 'package:running_on_dart/configurator.dart';
+import 'package:running_on_dart/utils/data_util.dart';
+import 'package:running_on_dart/utils/discord_extentions.dart';
 
-void onDogButtonListener(NyxxGateway client) {
-  verbose("Registering Dog button listener");
-  // This one uses Followup messages, or it will crash the bot because the response is not unique
-  client.onMessageComponentInteraction.listen((event) async {
-    if (event.interaction.type == InteractionType.messageComponent &&
-        event.interaction.data.customId == "dog") {
-      verbose("Dog button pressed!");
-      //reply with a a "ok!" message
-      await event.interaction.respond(
-          MessageBuilder(
-            content: "OK!",
-          ),
-          isEphemeral: true);
+void onMessageXPAwardListener(NyxxGateway client) {
+  verbose("Registering XP award listener");
+  client.onMessageCreate.listen((event) async {
+    if (!await DUtil.isBot(event.message.author)) {
+      var userId = event.message.author.id;
+      var userData = await DataUtil.getUserData(userId);
+
+      // Generate random XP
+      double randomXP = Configurator.instance.getRandomXP();
+
+      // Update XP
+      userData['xp'] = (userData['xp'] as double? ?? 0.0) + randomXP;
+      await DataUtil.saveUserData(userId, userData);
+
+      // Optionally, send a confirmation message or log
+      verbose("Awarded $randomXP XP to user ${event.message.author.username}");
     }
   });
 }

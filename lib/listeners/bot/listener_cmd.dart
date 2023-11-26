@@ -20,6 +20,7 @@ import 'package:fast_log/fast_log.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 
 void onCommandListener(CommandsPlugin commands) {
+  verbose('Registering command listener');
   commands.onPreCall.listen((event) async {
     verbose('Executing: Command: $event');
   });

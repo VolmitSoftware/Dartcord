@@ -24,8 +24,8 @@ import 'package:http/http.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/services/ai/openai_manager.dart';
+import 'package:running_on_dart/utils/image_manipulation.dart';
 import 'package:running_on_dart/utils/prefab/embed.dart';
-import 'package:running_on_dart/utils/utils_master.dart';
 
 final image_vary =
     ChatCommand('ai_image_vary', "Upload an image to see an AI remake it!",
@@ -71,7 +71,7 @@ final image_vary =
   verbose("Downloaded image saved locally.");
 
   // Convert to PNG
-  await BotTools.convertToPng(localFilePath, convertedPath, ImageFormat.RGB);
+  await ImageUtils.convertToPng(localFilePath, convertedPath, ImageFormat.RGB);
   verbose("Image converted to PNG format.");
 
   // Generate image variations

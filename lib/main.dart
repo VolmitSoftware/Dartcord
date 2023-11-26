@@ -56,4 +56,5 @@ void main() async {
   verbose("Loaded listeners");
   OpenAIManager.instance.initialize(Configurator.instance.openAiToken);
   verbose("Initialized OpenAI");
+  info(Configurator.instance.xpMin);
 }

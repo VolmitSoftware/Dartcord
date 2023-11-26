@@ -20,6 +20,7 @@ import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 
 void onReadyListener(NyxxGateway client) {
+  verbose('Registering ready listener');
   client.onReady.listen((event) async {
     info('Ready and Waiting!');
   });

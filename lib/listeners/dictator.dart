@@ -19,14 +19,15 @@
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
+import 'package:running_on_dart/listeners/bot/listener_cmd.dart';
+import 'package:running_on_dart/listeners/bot/listener_cmd_error.dart';
+import 'package:running_on_dart/listeners/bot/listener_ready.dart';
 import 'package:running_on_dart/listeners/button/dog_listener.dart';
-import 'package:running_on_dart/listeners/ordinator/listener_cmd.dart';
 import 'package:running_on_dart/listeners/other/listener_hello.dart';
+import 'package:running_on_dart/listeners/other/listener_xp.dart';
 import 'package:running_on_dart/listeners/selector/listener_bing.dart';
 
 import 'button/cat_listener.dart';
-import 'ordinator/listener_cmd_error.dart';
-import 'ordinator/listener_ready.dart';
 
 void registerListeners(NyxxGateway client, CommandsPlugin commands) {
   verbose("Registering listeners");
@@ -37,5 +38,6 @@ void registerListeners(NyxxGateway client, CommandsPlugin commands) {
   onDogButtonListener(client);
   onBingButtonListener(client);
   onHiMessageListener(client);
+  onMessageXPAwardListener(client);
   // Add more listener registrations here
 }

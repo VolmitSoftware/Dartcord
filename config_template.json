@@ -6,5 +6,9 @@
   "botPrefix": "",
   "xpBaseMultiplier": 1.0,
   "botOwnerID": "000000000000000000000",
-  "openAiToken": "0000000000[OPTIONAL]00000000000"
+  "openAiToken": "0000000000[OPTIONAL]00000000000",
+  "xpPerMessage": {
+    "min": 0.0,
+    "max": 3.0
+  }
 }

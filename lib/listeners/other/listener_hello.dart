@@ -16,14 +16,15 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
-import 'package:running_on_dart/utils/utils_master.dart';
+import 'package:running_on_dart/utils/discord_extentions.dart';
 
 void onHiMessageListener(NyxxGateway client) {
+  verbose("Registering Hi message listener");
   client.onMessageCreate.listen((event) async {
     //Simplified message parsing, and bot checking!
-    if (BotTools.messageHas(event.message.content) &&
-        !await BotTools.isBot(event)) {
+    if (DUtil.messageHas(event.message.content) && !await DUtil.isBot(event)) {
       await event.message.manager.create(MessageBuilder(
         content: "I'm Dartcord!",
         replyId: event.message.id,

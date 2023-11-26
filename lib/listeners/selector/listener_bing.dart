@@ -16,11 +16,13 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:running_on_dart/utils/prefab/selection_menu.dart';
 import 'package:running_on_dart/utils/prefab/selection_menu_component.dart';
 
 void onBingButtonListener(NyxxGateway client) {
+  verbose("Registering Bing button listener");
   client.onMessageComponentInteraction.listen((event) async {
     if (event.interaction.type == InteractionType.messageComponent &&
         event.interaction.data.customId == "bing") {

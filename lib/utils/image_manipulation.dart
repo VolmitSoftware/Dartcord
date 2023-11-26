@@ -21,53 +21,42 @@ import 'dart:typed_data';
 
 import 'package:fast_log/fast_log.dart';
 import 'package:image/image.dart';
-import 'package:nyxx/nyxx.dart';
-import 'package:running_on_dart/main.dart';
 
 enum ImageFormat { RGB, RGBA }
 
-class BotTools {
-  /// Checks if a given entity is a bot.
-  ///
-  /// Accepts [entity] which can be a User, Member, Snowflake (ID), or Message.
-  ///
-  /// Returns `true` if the entity is a bot, otherwise `false`.
-  static Future<bool> isBot(dynamic entity) async {
-    verbose("Checking if $entity is a bot.");
-    switch (entity.runtimeType) {
-      case User:
-        return (entity as User).isBot;
-      case Member:
-        return isBot((entity as Member).id);
-      case Snowflake:
-        User user = await nyxxBotClient.user.manager.get(entity as Snowflake);
-        return user.isBot;
-      case Message:
-        return isBot((entity as MessageCreateEvent).message.author.id);
-      default:
-        error("Unknown entity type: ${entity.runtimeType}");
-        return false;
-    }
-  }
+enum MaskFormat {
+  BOTTOM_MASK,
+  EMPTY_MASK,
+  FULL_MASK,
+  INNER_MASK,
+  LEFT_MASK,
+  OUTER_MASK,
+  RIGHT_MASK,
+  TOP_MASK
+}
 
-  /// Checks if a given message contains variations of "im".
-  ///
-  /// [message] is the message text to be checked.
-  ///
-  /// Returns `true` if variations of "im" are found in the message, otherwise `false`.
-  static bool messageHas(String message) {
-    RegExp imRegex = RegExp(r"\bim\b", caseSensitive: false);
-    return imRegex.hasMatch(message);
-  }
+class ImageUtils {
+  static Map<String, String> maskMapString = {
+    "BOTTOM_MASK": File("./assets/mask/BottomMask.png").path,
+    "EMPTY_MASK": File("./assets/mask/EmptyMask.png").path,
+    "FULL_MASK": File("./assets/mask/FullMask.png").path,
+    "INNER_MASK": File("./assets/mask/InnerMask.png").path,
+    "LEFT_MASK": File("./assets/mask/LeftMask.png").path,
+    "OUTER_MASK": File("./assets/mask/OuterMask.png").path,
+    "RIGHT_MASK": File("./assets/mask/RightMask.png").path,
+    "TOP_MASK": File("./assets/mask/TopMask.png").path
+  };
 
-  /// Checks if a given message exactly contains "Dartcord".
-  ///
-  /// [message] is the message text to be checked.
-  ///
-  /// Returns `true` if the message contains "Dartcord", otherwise `false`.
-  static bool messageHasExact(String message) {
-    return message.contains("Dartcord");
-  }
+  static Map<MaskFormat, String> maskMap = {
+    MaskFormat.BOTTOM_MASK: File("./assets/mask/BottomMask.png").path,
+    MaskFormat.EMPTY_MASK: File("./assets/mask/EmptyMask.png").path,
+    MaskFormat.FULL_MASK: File("./assets/mask/FullMask.png").path,
+    MaskFormat.INNER_MASK: File("./assets/mask/InnerMask.png").path,
+    MaskFormat.LEFT_MASK: File("./assets/mask/LeftMask.png").path,
+    MaskFormat.OUTER_MASK: File("./assets/mask/OuterMask.png").path,
+    MaskFormat.RIGHT_MASK: File("./assets/mask/RightMask.png").path,
+    MaskFormat.TOP_MASK: File("./assets/mask/TopMask.png").path
+  };
 
   static Future<void> convertToPng(
       String inputPath, String outputPath, ImageFormat format) async {
