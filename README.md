@@ -38,8 +38,9 @@ Dartcord currently includes the following example slash command:
 - `/selectionmenudemo` - Replies with a selection menu (show how to use the selector)
 - `/cat_embed` - Prints an embed with the new dartcordEmbed frame (and shows a cat picture) [async example]
 - `/embed_embed` - Prints an embed using NOT my embed frame [sync]
-- `/ai_image_vary ` - Upload an image to your Dalle account if you have a token and get a variant [Uploader Showcase]
+- `/ai_image_vary ` - Upload an image to your Dall-e account if you have a token and get a variant [Uploader Showcase]
 - `/ai_image ` - Get an image based on a prompt [Prompt Showcase]
+- `/ai_image_edit` - Edit an image with prompt and mask prefab [Asset Showcase]
 
 Add additional commands in `autocrat.dart`.
 
@@ -51,6 +52,7 @@ Dartcord handles the following events:
 - `Startup [Client]` - The client interactions Listener Example
 - `Error in commands` - a passive Listener
 - `Comand Usage` - an Active listener
+- `XP System` -Whenever a user sends a message (Non-bot) they get xp [Config/XP Demo] 
 - ...
 
 Add additional event listeners in `dictator.dart`.
@@ -63,6 +65,7 @@ Add additional event listeners in `dictator.dart`.
 - [Nyxx's Bot](https://github.com/nyxx-discord/running_on_dart)
 - [Nyxx Api Documentation](https://nyxx.l7ssha.xyz/docs/intro/)
 - [Dart Openai](https://pub.dev/packages/dart_openai)
+- [Fast Log](https://pub.dev/packages/fast_log) Easy logging
 - ...
 
 ## Contributing

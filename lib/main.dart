@@ -55,6 +55,4 @@ void main() async {
   registerListeners(nyxxBotClient, commands); // Load all Listeners
   verbose("Loaded listeners");
   OpenAIManager.instance.initialize(Configurator.instance.openAiToken);
-  verbose("Initialized OpenAI");
-  info(Configurator.instance.xpMin);
 }

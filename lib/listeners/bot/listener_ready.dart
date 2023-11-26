@@ -22,6 +22,6 @@ import 'package:nyxx/nyxx.dart';
 void onReadyListener(NyxxGateway client) {
   verbose('Registering ready listener');
   client.onReady.listen((event) async {
-    info('Ready and Waiting!');
+    success('Bot Started - Ready and Waiting!');
   });
 }
