@@ -357,19 +357,18 @@ packages:
     dependency: "direct main"
     description:
       name: nyxx
-      sha256: a57c678d6222b186b0913ef13f215fcce9c553ea8edb36fcba656e8e42bc676f
+      sha256: "665cc368583eb066cff37bac5ef8dd0a9665f9b276ba363872443a1f78e08cef"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.2"
+    version: "6.0.3"
   nyxx_commands:
     dependency: "direct main"
     description:
-      path: "."
-      ref: dev
-      resolved-ref: e2432023394f74b4b0134364d6e0866a4505a823
-      url: "https://github.com/nyxx-discord/nyxx_commands.git"
-    source: git
-    version: "6.0.0"
+      name: nyxx_commands
+      sha256: "1b9dc3b8940e6d013b6eaeba592514f45a41c0b985ea71fefa13f824cdc36c27"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.1"
   nyxx_extensions:
     dependency: "direct main"
     description:
