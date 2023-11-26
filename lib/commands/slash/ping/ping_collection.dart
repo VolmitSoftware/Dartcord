@@ -17,6 +17,7 @@
  */
 
 // Imports will be ommitted in code samples below
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/utils/converter.dart';
@@ -37,6 +38,8 @@ final pingCluster = ChatGroup(
           @Description('The type of latency to view')
           String? selection,
         ]) async {
+          verbose('Starting pingchoices');
+          verbose('Selection: $selection');
           Duration latency;
           switch (selection) {
             case 'Basic':
@@ -69,6 +72,8 @@ final pingCluster = ChatGroup(
             MessageBuilder(
                 content: 'Choose the latency metric you want to see'),
           );
+          verbose('Starting pingselection');
+          verbose('Selection: $selection');
           Duration latency;
           switch (selection) {
             case 'Basic':
@@ -101,6 +106,8 @@ final pingCluster = ChatGroup(
           @Description('The type of latency to view')
           String? selection,
         ]) async {
+          verbose('Starting pingstring');
+          verbose('Selection: $selection');
           Duration latency;
           switch (selection) {
             case 'Basic':

@@ -16,10 +16,11 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 
 void onReadyListener(NyxxGateway client) {
   client.onReady.listen((event) async {
-    print('Ready and Waiting!');
+    info('Ready and Waiting!');
   });
 }

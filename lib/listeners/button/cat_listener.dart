@@ -16,6 +16,7 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 
 void onCatButtonListener(NyxxGateway client) {
@@ -23,7 +24,7 @@ void onCatButtonListener(NyxxGateway client) {
   client.onMessageComponentInteraction.listen((event) async {
     if (event.interaction.type == InteractionType.messageComponent &&
         event.interaction.data.customId == "cat") {
-      print("Cat button pressed!");
+      verbose("Cat button pressed!");
       //acknowledge the interaction (NEEDED IF NON-Ephemeral (See Dog as an Example))
       await event.interaction.acknowledge();
       //reply with a a "ok!" message

@@ -16,14 +16,15 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 
 void onCommandListener(CommandsPlugin commands) {
   commands.onPreCall.listen((event) async {
-    print('Executing: Command: $event');
+    verbose('Executing: Command: $event');
   });
 
   commands.onPostCall.listen((event) async {
-    print('Completed: Command: $event');
+    verbose('Completed: Command: $event');
   });
 }

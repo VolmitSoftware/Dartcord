@@ -16,16 +16,19 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/commands/slash/button/button_demo.dart';
 import 'package:running_on_dart/commands/slash/button/button_selection_demo.dart';
 import 'package:running_on_dart/commands/slash/embed/embed.dart';
 import 'package:running_on_dart/commands/slash/embed/embed_cat.dart';
 import 'package:running_on_dart/commands/slash/image/Image_from_prompt.dart';
-import 'package:running_on_dart/commands/slash/image/image_upload.dart';
+import 'package:running_on_dart/commands/slash/image/image_edit.dart';
+import 'package:running_on_dart/commands/slash/image/image_variant.dart';
 import 'package:running_on_dart/commands/slash/ping/ping_collection.dart';
 
 void autocrat(CommandsPlugin commands) {
+  verbose("Registering commands");
   commands..addCommand(pingCluster);
   commands..addCommand(embed);
   commands..addCommand(cat);
@@ -33,6 +36,7 @@ void autocrat(CommandsPlugin commands) {
   commands..addCommand(selectionMenuDemo);
   commands..addCommand(image_vary);
   commands..addCommand(image_prompt);
+  commands..addCommand(image_edit);
 
   // Add more commands here
   ;

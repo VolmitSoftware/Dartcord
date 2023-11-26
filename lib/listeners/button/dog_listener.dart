@@ -16,6 +16,7 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 
 void onDogButtonListener(NyxxGateway client) {
@@ -23,7 +24,7 @@ void onDogButtonListener(NyxxGateway client) {
   client.onMessageComponentInteraction.listen((event) async {
     if (event.interaction.type == InteractionType.messageComponent &&
         event.interaction.data.customId == "dog") {
-      print("Dog button pressed!");
+      verbose("Dog button pressed!");
       //reply with a a "ok!" message
       await event.interaction.respond(
           MessageBuilder(

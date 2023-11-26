@@ -30,32 +30,40 @@ final image_prompt = ChatCommand('ai_image', "An image for your thoughts?",
   verbose("Command invoked: ai_image with prompt: ${prompt ?? 'Default'}");
 
   try {
-    // Generate image
-    String? imageUrl = await OpenAIManager.instance.gen_image(
-      prompt ?? 'a Nebelung cat sitting on a carved pumpkin',
-      1,
-      OpenAIImageSize.size1024,
-      OpenAIImageResponseFormat.url,
+    // Generate images
+    List<String?> imageUrls = await OpenAIManager.instance.create_image(
+      prompt: prompt ?? 'a Nebelung cat sitting on a carved pumpkin',
+      n: 1, // Requesting 3 images
+      size: OpenAIImageSize.size1024,
+      responseFormat: OpenAIImageResponseFormat.url,
     );
 
-    // Log the generated image URL
-    if (imageUrl != null) {
-      info("Image generated with URL: $imageUrl");
+    // Check if image URLs were received
+    if (imageUrls.any((url) => url != null)) {
+      info(
+          "Images generated with URLs: ${imageUrls.where((url) => url != null).join(', ')}");
+
+      // Using Custom Embeds for each image
+      List<EmbedBuilder> embeds = [];
+      for (var url in imageUrls) {
+        if (url != null) {
+          var embed = await dartcordEmbed(fields: [
+            EmbedFieldBuilder(
+                name: "Prompt: ", value: prompt.toString(), isInline: true)
+          ], imageUrl: url);
+          embeds.add(embed);
+        }
+      }
+
+      await context.respond(MessageBuilder(embeds: embeds));
+      verbose("Response sent with AI-generated images.");
     } else {
-      error("Failed to generate image.");
+      error("Failed to generate images.");
       await context.respond(
-          MessageBuilder(content: "Failed to generate image."),
+          MessageBuilder(content: "Failed to generate images."),
           level: ResponseLevel.private);
       return;
     }
-
-    // Using Custom Embed
-    var embed = await dartcordEmbed(fields: [
-      EmbedFieldBuilder(
-          name: "Prompt: ", value: prompt.toString(), isInline: true)
-    ], imageUrl: imageUrl);
-    await context.respond(MessageBuilder(embeds: [embed]));
-    verbose("Response sent with AI-generated image.");
   } catch (e) {
     error("Error in ai_image command: ${e.toString()}");
     await context.respond(MessageBuilder(content: "An error occurred."),

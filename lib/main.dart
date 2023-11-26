@@ -19,6 +19,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/services/ai/openai_manager.dart';
@@ -39,14 +40,20 @@ Future<void> initializeConfig() async {
 
 void main() async {
   await initializeConfig();
+  verbose("Initializing Config");
   final commands = CommandsPlugin(prefix: mentionOr((_) => '!'));
-  autocrat(commands); // Load all commands
+  autocrat(commands); // Load al
+  verbose("Loaded commands");
   var discordToken = Configurator.instance.discordToken;
   nyxxBotClient = await Nyxx.connectGateway(discordToken,
       GatewayIntents.allUnprivileged | GatewayIntents.messageContent,
       options:
           GatewayClientOptions(plugins: [logging, cliIntegration, commands]));
+  verbose("Connected to Discord");
   botUser = await nyxxBotClient.users.fetchCurrentUser();
+  verbose("Fetched bot user");
   registerListeners(nyxxBotClient, commands); // Load all Listeners
+  verbose("Loaded listeners");
   OpenAIManager.instance.initialize(Configurator.instance.openAiToken);
+  verbose("Initialized OpenAI");
 }

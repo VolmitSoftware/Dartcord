@@ -19,6 +19,7 @@
 import 'dart:io';
 
 import 'package:dart_openai/dart_openai.dart';
+import 'package:fast_log/fast_log.dart';
 
 class OpenAIManager {
   // Private constructor for the singleton pattern
@@ -29,58 +30,106 @@ class OpenAIManager {
 
   // Method to initialize the OpenAI API key
   void initialize(String apiKey) {
+    info("Initializing OpenAI / API key");
     OpenAI.apiKey = apiKey;
   }
 
   // Method to generate an image URL using OpenAI's image model
-  Future<String?> gen_image(String prompt, int n, OpenAIImageSize size,
-      OpenAIImageResponseFormat responseFormat) async {
+  Future<List<String?>> create_image({
+    String? model,
+    required String prompt,
+    int? n,
+    OpenAIImageSize? size,
+    OpenAIImageStyle? style,
+    OpenAIImageQuality? quality,
+    OpenAIImageResponseFormat? responseFormat,
+    String? user,
+  }) async {
     try {
-      OpenAIImageModel image = await OpenAI.instance.image.create(
+      verbose("Building model for image generation");
+      OpenAIImageModel imageModel = await OpenAI.instance.image.create(
+        model: model,
         prompt: prompt,
         n: n,
         size: size,
+        style: style,
+        quality: quality,
         responseFormat: responseFormat,
+        user: user,
       );
-
-      if (image.data.isNotEmpty) {
-        return image.data.first.url; // Assuming the first URL is what you want
+      verbose("Built images for image generation, returning URLs");
+      if (imageModel.data.isNotEmpty) {
+        return imageModel.data.map((item) => item.url).toList();
       } else {
         throw Exception('No image data found');
       }
     } catch (e) {
-      print("Error generating image: $e");
-      return 'Error: $e';
+      error("Error creating image: $e");
+      return [];
     }
   }
 
-  /// Generates variations of an image using OpenAI's image variation model.
-  ///
-  /// [model] specifies the model to use, typically "dall-e-2".
-  /// [imagePath] is the path to the image file for which variations are to be created.
-  /// [n] specifies the number of variations to generate.
-  /// [size] determines the size of the generated images.
-  /// [responseFormat] specifies the format of the response.
-  ///
-  /// Returns a list of URLs of the generated image variations.
-  Future<List<String?>> varry_Image(File image, int? count,
-      OpenAIImageSize? size, OpenAIImageResponseFormat? responseFormat) async {
+  Future<List<String?>> generate_image_variations({
+    String? model,
+    required File image,
+    int? n,
+    OpenAIImageSize? size,
+    OpenAIImageResponseFormat? responseFormat,
+    String? user,
+  }) async {
     try {
-      OpenAIImageModel imageVariations = await OpenAI.instance.image.variation(
+      verbose("Building model for image variation generation");
+      OpenAIImageModel variationModel = await OpenAI.instance.image.variation(
+        model: model,
         image: image,
-        n: count ?? 1,
-        size: size ?? OpenAIImageSize.size1024,
-        responseFormat: responseFormat ?? OpenAIImageResponseFormat.url,
+        n: n,
+        size: size,
+        responseFormat: responseFormat,
+        user: user,
       );
-
-      if (imageVariations.data.isNotEmpty) {
-        return imageVariations.data.map((item) => item.url).toList();
+      verbose("Built images for image variation generation, returning URLs");
+      if (variationModel.data.isNotEmpty) {
+        return variationModel.data.map((item) => item.url).toList();
       } else {
         throw Exception('No image variation data found');
       }
     } catch (e) {
-      print("Error generating image variations: $e");
-      return ['Error: $e'];
+      error("Error generating image variations: $e");
+      return [];
+    }
+  }
+
+  Future<List<String?>> edit_image({
+    String? model,
+    required File image,
+    File? mask,
+    required String prompt,
+    int? n,
+    OpenAIImageSize? size,
+    OpenAIImageResponseFormat? responseFormat,
+    String? user,
+  }) async {
+    try {
+      verbose("Building model for image editing");
+      OpenAIImageModel editModel = await OpenAI.instance.image.edit(
+        model: model,
+        image: image,
+        mask: mask,
+        prompt: prompt,
+        n: n,
+        size: size,
+        responseFormat: responseFormat,
+        user: user,
+      );
+      verbose("Built images for image editing, returning URLs");
+      if (editModel.data.isNotEmpty) {
+        return editModel.data.map((item) => item.url).toList();
+      } else {
+        throw Exception('No edited image data found');
+      }
+    } catch (e) {
+      error("Error editing image: $e");
+      return [];
     }
   }
 }

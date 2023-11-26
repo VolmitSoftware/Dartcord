@@ -19,16 +19,18 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:fast_log/fast_log.dart';
 import 'package:http/http.dart' as http;
 
 Future<String> fetchCatImageUrl() async {
+  verbose("Fetching cat image URL from Rory API");
   Random random = Random();
   int catId = random.nextInt(123) + 1; // Assuming IDs start from 1 to 124
   var response = await http.get(Uri.parse('https://rory.cat/purr/$catId'));
 
   if (response.statusCode == 200) {
     var data = json.decode(response.body);
-    print("Cat image URL: ${data['url']}");
+    verbose("Cat image URL: ${data['url']}");
     return data['url']; // Assuming 'url' is the key for the image URL
   } else {
     // Handle the case when the API does not respond as expected

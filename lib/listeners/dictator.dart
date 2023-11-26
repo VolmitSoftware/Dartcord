@@ -16,6 +16,7 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/listeners/button/dog_listener.dart';
@@ -28,6 +29,7 @@ import 'ordinator/listener_cmd_error.dart';
 import 'ordinator/listener_ready.dart';
 
 void registerListeners(NyxxGateway client, CommandsPlugin commands) {
+  verbose("Registering listeners");
   onReadyListener(client);
   onCommandErrorListener(commands);
   onCommandListener(commands);

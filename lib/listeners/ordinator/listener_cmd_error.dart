@@ -16,18 +16,19 @@
  *  -   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 
 void onCommandErrorListener(CommandsPlugin commands) {
-  commands.onCommandError.listen((error) async {
-    ConverterFailedException converterError = error as ConverterFailedException;
+  commands.onCommandError.listen((e) async {
+    ConverterFailedException converterError = e as ConverterFailedException;
     if (converterError.context is InteractiveContext) {
       final InteractiveContext context =
           converterError.context as InteractiveContext;
-      switch (error.runtimeType) {
+      switch (e.runtimeType) {
         case CheckFailedException:
-          CheckFailedException checkError = error as CheckFailedException;
+          CheckFailedException checkError = e as CheckFailedException;
           if (checkError.failed is CooldownCheck) {
             await context.respond(
                 MessageBuilder(
@@ -55,14 +56,14 @@ void onCommandErrorListener(CommandsPlugin commands) {
           break;
 
         case UncaughtException:
-          UncaughtException uncaughtError = error as UncaughtException;
+          UncaughtException uncaughtError = e as UncaughtException;
           await context.respond(MessageBuilder(
               content: "Uncaught exception: ${uncaughtError.exception}"));
-          print('Uncaught exception in command: ${uncaughtError.exception}');
+          error('Uncaught exception in command: ${uncaughtError.exception}');
           break;
 
         case ConverterFailedException:
-          ConverterFailedException converterError = error;
+          ConverterFailedException converterError = e;
           if (converterError.context is InteractiveContext) {
             final InteractiveContext iContext =
                 converterError.context as InteractiveContext;
@@ -75,7 +76,7 @@ void onCommandErrorListener(CommandsPlugin commands) {
           context.respond(MessageBuilder(
               content:
                   "An unknown error occurred. Please contact a developer for more information."));
-          print('Uncaught error: $error');
+          error('Uncaught error: $e');
       }
     }
   });
