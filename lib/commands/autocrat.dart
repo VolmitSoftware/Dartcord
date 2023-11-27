@@ -26,6 +26,7 @@ import 'package:running_on_dart/commands/slash/image/Image_from_prompt.dart';
 import 'package:running_on_dart/commands/slash/image/image_edit.dart';
 import 'package:running_on_dart/commands/slash/image/image_variant.dart';
 import 'package:running_on_dart/commands/slash/ping/ping_collection.dart';
+import 'package:running_on_dart/commands/slash/ticket/ticket_collection.dart';
 
 void autocrat(CommandsPlugin commands) {
   verbose("Registering commands");
@@ -37,6 +38,7 @@ void autocrat(CommandsPlugin commands) {
   commands..addCommand(image_vary);
   commands..addCommand(image_prompt);
   commands..addCommand(image_edit);
+  commands..addCommand(ticketCluster);
 
   // Add more commands here
   ;

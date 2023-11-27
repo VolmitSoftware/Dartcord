@@ -14,13 +14,13 @@ dependencies:
   build_runner: ^2.4.6
   dart_openai: ^5.0.0
   fast_log: ^1.0.7
-  http: ^1.1.1
+  http: ^1.1.2
   image: 3.0.1
   nyxx: ^6.0.3
 #    git:
 #      url: https://github.com/nyxx-discord/nyxx_commands.git
 #      ref: dev
-  nyxx_commands: ^6.0.1
+  nyxx_commands: ^6.0.2
   nyxx_extensions: ^4.1.0
 
 

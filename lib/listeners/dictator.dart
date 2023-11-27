@@ -25,6 +25,7 @@ import 'package:running_on_dart/listeners/bot/listener_ready.dart';
 import 'package:running_on_dart/listeners/button/dog_listener.dart';
 import 'package:running_on_dart/listeners/other/listener_hello.dart';
 import 'package:running_on_dart/listeners/other/listener_xp.dart';
+import 'package:running_on_dart/listeners/other/ticket_listener.dart';
 import 'package:running_on_dart/listeners/selector/listener_bing.dart';
 
 import 'button/cat_listener.dart';
@@ -39,5 +40,6 @@ void registerListeners(NyxxGateway client, CommandsPlugin commands) {
   onBingButtonListener(client);
   onHiMessageListener(client);
   onMessageXPAwardListener(client);
-  // Add more listener registrations here
+  onTicketButtonPress(client);
+// Add more listener registrations here
 }

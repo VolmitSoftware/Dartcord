@@ -24,7 +24,7 @@ import 'package:http/http.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/services/ai/openai_manager.dart';
-import 'package:running_on_dart/utils/image_manipulation.dart';
+import 'package:running_on_dart/utils/dartcord/image_manipulation.dart';
 import 'package:running_on_dart/utils/prefab/embed.dart';
 
 final image_vary =

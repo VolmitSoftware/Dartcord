@@ -18,7 +18,7 @@
 
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
-import 'package:running_on_dart/utils/discord_extentions.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/d_util.dart';
 
 void onHiMessageListener(NyxxGateway client) {
   verbose("Registering Hi message listener");

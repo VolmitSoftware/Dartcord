@@ -18,6 +18,7 @@
 
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
+import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/main.dart';
 
 class DUtil {

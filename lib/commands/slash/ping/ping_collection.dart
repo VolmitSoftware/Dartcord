@@ -20,7 +20,7 @@
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/utils/converter.dart';
+import 'package:running_on_dart/utils/dartcord/converter.dart';
 
 final pingCluster = ChatGroup(
     "ping", "This is what Bundles commands look like when as a ChatGroup",

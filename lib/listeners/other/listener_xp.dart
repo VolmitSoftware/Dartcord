@@ -19,8 +19,8 @@
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:running_on_dart/configurator.dart';
-import 'package:running_on_dart/utils/data_util.dart';
-import 'package:running_on_dart/utils/discord_extentions.dart';
+import 'package:running_on_dart/utils/dartcord/data_util.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/d_util.dart';
 
 void onMessageXPAwardListener(NyxxGateway client) {
   verbose("Registering XP award listener");

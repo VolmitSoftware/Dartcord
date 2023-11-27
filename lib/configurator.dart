@@ -20,14 +20,14 @@ class Configurator {
 
   // Private constructor for internal use
   Configurator._internal({
-    this.discordToken = '',
-    this.botImageURL = '',
-    this.botColor = '',
-    this.botCompanyName = '',
-    this.botPrefix = '',
+    this.discordToken = 'none',
+    this.botImageURL = 'none',
+    this.botColor = 'none',
+    this.botCompanyName = 'none',
+    this.botPrefix = 'none',
     this.xpBaseMultiplier = 1.0,
-    this.botOwnerID = '',
-    this.openAiToken = '',
+    this.botOwnerID = 'none',
+    this.openAiToken = 'none',
     this.xpMin = 0.0,
     this.xpMax = 3.0,
   });

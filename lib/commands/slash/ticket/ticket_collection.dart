@@ -18,7 +18,10 @@
 
 import 'dart:ffi';
 
+import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/d_channel.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/d_message.dart';
 
 /*
   * This is the ticketing system. It is a work in progress, and will be updated as time goes on.
@@ -38,7 +41,19 @@ final ticketCluster = ChatGroup("ticket",
         'build-hub',
         "Create the whole ticketing system, including the hub, and the ticket creation button.",
         (ChatContext context) async {
-          //TODO Create the ticketing system
+          DChannel.sendMessage(
+              context,
+              MessageBuilder(
+                  content:
+                      "Checking/Creating the ticketing system, please wait..."));
+          Guild guild = await context.guild!.get();
+          GuildChannel? ticketHubCategory =
+              DChannel.createCategory(guild, "TICKET CENTRAL", true)
+                  as GuildChannel?;
+          GuildChannel? ticketHubChannel = await DChannel.createInCategory(
+              guild, "ticket-hub", ChannelType.guildText, ticketHubCategory!);
+          DMessage.sendMessageToChannel(
+              ticketHubChannel as TextChannel, MessageBuilder(content: "Hi"));
         },
       ),
       ChatCommand(
@@ -54,8 +69,8 @@ final ticketCluster = ChatGroup("ticket",
         (
           ChatContext context, [
           @Choices({
-            'Add': true,
-            'Remove': false,
+            'Add': "true",
+            'Remove': "false",
           })
           @Description('Add or Remove a user from a ticket.')
           Bool? selection,
