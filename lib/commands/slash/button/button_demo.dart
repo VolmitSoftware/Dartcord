@@ -19,7 +19,7 @@
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/utils/prefab/button.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/d_button.dart';
 
 final buttonDemo = ChatCommand(
   'buttondemo',
@@ -41,25 +41,25 @@ final buttonDemo = ChatCommand(
     try {
       switch (selection) {
         case 'ONE':
-          buttons.add(dartcordButton(
+          buttons.add(d_button(
               label: "Cat!", style: ButtonStyle.secondary, customId: "cat"));
           info("One button added.");
           break;
         case 'TWO':
           buttons
-            ..add(dartcordButton(
+            ..add(d_button(
                 label: "One!", style: ButtonStyle.secondary, customId: "cat"))
-            ..add(dartcordButton(
+            ..add(d_button(
                 label: "Two!", style: ButtonStyle.secondary, customId: "bing"));
           info("Two buttons added.");
           break;
         case 'THREE':
           buttons
-            ..add(dartcordButton(
+            ..add(d_button(
                 label: "One!", style: ButtonStyle.secondary, customId: "cat"))
-            ..add(dartcordButton(
+            ..add(d_button(
                 label: "Two!", style: ButtonStyle.secondary, customId: "bing"))
-            ..add(dartcordButton(
+            ..add(d_button(
                 label: "Dog!", style: ButtonStyle.secondary, customId: "dog"));
           info("Three buttons added.");
           break;

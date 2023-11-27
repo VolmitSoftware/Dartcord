@@ -23,6 +23,7 @@ import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/utils/nyxx_betterment/d_channel.dart';
 import 'package:running_on_dart/utils/nyxx_betterment/d_message.dart';
+import 'package:running_on_dart/utils/prefab/embed.dart';
 
 /*
   * This is the ticketing system. It is a work in progress, and will be updated as time goes on.
@@ -70,10 +71,26 @@ final ticketCluster = ChatGroup("ticket",
         }
         verbose("Ticket Hub Channel '${ticketHubChannel.name}' is ready.");
 
-        // Sending a message to the Ticket Hub Channel
+        // Create the embed message
+        var ticketEmbed = await ticketCenterEmbed();
+
+        // Create the button for ticket creation
+        var ticketButton = ButtonBuilder(
+            label: 'Create Ticket',
+            customId: 'create_ticket',
+            style: ButtonStyle.success);
+
+        // Construct the message with embed and button
+        var message = MessageBuilder()
+          ..embeds = [ticketEmbed]
+          ..components = [
+            ActionRowBuilder(components: [ticketButton])
+          ];
+
+        // Send the message to the Ticket Hub Channel
         await DMessage.sendMessageToChannel(
-            ticketHubChannel as TextChannel, MessageBuilder(content: "Hi"));
-        verbose("Sent initial message to Ticket Hub Channel.");
+            ticketHubChannel as TextChannel, message);
+        verbose("Sent ticket information message to Ticket Hub Channel.");
 
         await context.respond(MessageBuilder(content: "Done!"),
             level: ResponseLevel.private);

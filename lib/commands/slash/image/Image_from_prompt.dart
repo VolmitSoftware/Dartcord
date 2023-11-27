@@ -21,7 +21,7 @@ import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/services/ai/openai_manager.dart';
-import 'package:running_on_dart/utils/prefab/embed.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/e_embed.dart';
 
 final image_prompt = ChatCommand('ai_image', "An image for your thoughts?",
     (ChatContext context,
@@ -47,7 +47,7 @@ final image_prompt = ChatCommand('ai_image', "An image for your thoughts?",
       List<EmbedBuilder> embeds = [];
       for (var url in imageUrls) {
         if (url != null) {
-          var embed = await dartcordEmbed(fields: [
+          var embed = await d_embed(fields: [
             EmbedFieldBuilder(
                 name: "Prompt: ", value: prompt.toString(), isInline: true)
           ], imageUrl: url);

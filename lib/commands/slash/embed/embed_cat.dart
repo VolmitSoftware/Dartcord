@@ -19,7 +19,7 @@
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/utils/prefab/embed.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/e_embed.dart';
 
 final cat =
     ChatCommand('cat_embed', "Le' Mew meow!", (ChatContext context) async {
@@ -27,7 +27,7 @@ final cat =
 
   try {
     // Using Custom Embed
-    var embed = await dartcordEmbed(fields: [
+    var embed = await d_embed(fields: [
       EmbedFieldBuilder(name: "Behold", value: "The cat!", isInline: true)
     ]);
     await context.respond(MessageBuilder(embeds: [embed]),

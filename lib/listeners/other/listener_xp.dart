@@ -18,8 +18,8 @@
 
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
-import 'package:running_on_dart/configurator.dart';
-import 'package:running_on_dart/utils/dartcord/data_util.dart';
+import 'package:running_on_dart/bot_cfg.dart';
+import 'package:running_on_dart/utils/dartcord/user_data.dart';
 import 'package:running_on_dart/utils/nyxx_betterment/d_util.dart';
 
 void onMessageXPAwardListener(NyxxGateway client) {
@@ -28,17 +28,15 @@ void onMessageXPAwardListener(NyxxGateway client) {
     if (await DUtil.isBot(event.message.author)) {
       return;
     } else {
-      var userId = event.message.author.id;
-      var userData = await DataUtil.getUserData(userId);
+      var userId = event.message.author.id.toString();
+      var userData =
+          await UserData.loadFromFile(userId) ?? UserData(userId: userId);
 
-      // Generate random XP
-      double randomXP = Configurator.instance.getRandomXP();
+      double randomXP = BotCFG.i.getRandomXP();
 
-      // Update XP
-      userData['xp'] = (userData['xp'] as double? ?? 0.0) + randomXP;
-      await DataUtil.saveUserData(userId, userData);
+      userData.xp += randomXP;
+      await userData.saveToFile();
 
-      // Optionally, send a confirmation message or log
       verbose("Awarded $randomXP XP to user ${event.message.author.username}");
     }
   });

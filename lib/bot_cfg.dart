@@ -4,8 +4,8 @@ import 'dart:math' as math;
 
 import 'package:fast_log/fast_log.dart';
 
-class Configurator {
-  static final Configurator _instance = Configurator._internal();
+class BotCFG {
+  static final BotCFG _i = BotCFG._internal();
 
   String discordToken;
   String botImageURL;
@@ -19,7 +19,7 @@ class Configurator {
   double xpMax;
 
   // Private constructor for internal use
-  Configurator._internal({
+  BotCFG._internal({
     this.discordToken = 'none',
     this.botImageURL = 'none',
     this.botColor = 'none',
@@ -33,40 +33,32 @@ class Configurator {
   });
 
   // Factory constructor for creating instance from JSON
-  factory Configurator.fromJson(Map<String, dynamic> json) {
-    _instance.discordToken =
-        json['discord_token'] as String? ?? _instance.discordToken;
-    _instance.botImageURL =
-        json['botImageURL'] as String? ?? _instance.botImageURL;
-    _instance.botColor = json['botColor'] as String? ?? _instance.botColor;
-    _instance.botCompanyName =
-        json['botCompanyName'] as String? ?? _instance.botCompanyName;
-    _instance.botPrefix = json['botPrefix'] as String? ?? _instance.botPrefix;
-    _instance.xpBaseMultiplier =
-        (json['xpBaseMultiplier'] as num?)?.toDouble() ??
-            _instance.xpBaseMultiplier;
-    _instance.botOwnerID =
-        json['botOwnerID'] as String? ?? _instance.botOwnerID;
-    _instance.openAiToken =
-        json['openAiToken'] as String? ?? _instance.openAiToken;
+  factory BotCFG.fromJson(Map<String, dynamic> json) {
+    _i.discordToken = json['discord_token'] as String? ?? _i.discordToken;
+    _i.botImageURL = json['botImageURL'] as String? ?? _i.botImageURL;
+    _i.botColor = json['botColor'] as String? ?? _i.botColor;
+    _i.botCompanyName = json['botCompanyName'] as String? ?? _i.botCompanyName;
+    _i.botPrefix = json['botPrefix'] as String? ?? _i.botPrefix;
+    _i.xpBaseMultiplier =
+        (json['xpBaseMultiplier'] as num?)?.toDouble() ?? _i.xpBaseMultiplier;
+    _i.botOwnerID = json['botOwnerID'] as String? ?? _i.botOwnerID;
+    _i.openAiToken = json['openAiToken'] as String? ?? _i.openAiToken;
 
     // xpPerMessage checks
     if (json.containsKey('xpPerMessage') &&
         json['xpPerMessage'] is Map<String, dynamic>) {
       var xpPerMessage = json['xpPerMessage'] as Map<String, dynamic>;
-      _instance.xpMin =
-          (xpPerMessage['min'] as num?)?.toDouble() ?? _instance.xpMin;
-      _instance.xpMax =
-          (xpPerMessage['max'] as num?)?.toDouble() ?? _instance.xpMax;
+      _i.xpMin = (xpPerMessage['min'] as num?)?.toDouble() ?? _i.xpMin;
+      _i.xpMax = (xpPerMessage['max'] as num?)?.toDouble() ?? _i.xpMax;
     }
 
     verbose("Config loaded");
-    return _instance;
+    return _i;
   }
 
   // Static getter to access the instance
-  static Configurator get instance {
-    return _instance;
+  static BotCFG get i {
+    return _i;
   }
 
   // Method to get a random XP value
@@ -82,7 +74,7 @@ Future<void> initializeConfig() async {
     var configFile = File('config.json');
     var contents = await configFile.readAsString();
     Map<String, dynamic> configData = json.decode(contents);
-    Configurator.fromJson(configData);
+    BotCFG.fromJson(configData);
   } catch (e) {
     verbose("Error loading config: $e");
     // Handle the error appropriately

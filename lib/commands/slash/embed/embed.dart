@@ -19,7 +19,7 @@
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/configurator.dart';
+import 'package:running_on_dart/bot_cfg.dart';
 
 final embed = ChatCommand(
     'embed_embed', 'Creates an embed with provided title and footer',
@@ -42,7 +42,7 @@ final embed = ChatCommand(
       ..title = title
       ..author = EmbedAuthorBuilder(
           name: username, url: Uri.parse('https://github.com/NextdoorPsycho'))
-      ..color = DiscordColor.parseHexString(Configurator.instance.botColor)
+      ..color = DiscordColor.parseHexString(BotCFG.i.botColor)
       ..timestamp = timestamp == true ? DateTime.now() : null
       ..fields = [
         EmbedFieldBuilder(
@@ -71,11 +71,8 @@ final embed = ChatCommand(
       ..description =
           "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
       ..footer = EmbedFooterBuilder(
-          text: "Made by: " +
-              Configurator.instance.botCompanyName +
-              " - " +
-              footer,
-          iconUrl: Uri.parse(Configurator.instance.botImageURL));
+          text: "Made by: " + BotCFG.i.botCompanyName + " - " + footer,
+          iconUrl: Uri.parse(BotCFG.i.botImageURL));
 
     await context.respond(MessageBuilder(embeds: [embed]),
         level: ResponseLevel.private);

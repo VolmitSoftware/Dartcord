@@ -26,7 +26,7 @@ import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/services/ai/openai_manager.dart';
 import 'package:running_on_dart/utils/dartcord/image_manipulation.dart';
 import 'package:running_on_dart/utils/nyxx_betterment/d_util.dart';
-import 'package:running_on_dart/utils/prefab/embed.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/e_embed.dart';
 
 final image_edit = ChatCommand(
     'ai_image_edit', "Upload an image to see an AI remake it!",
@@ -128,7 +128,7 @@ final image_edit = ChatCommand(
     for (var url in imageUrls) {
       info("URL: $url");
       if (url != null) {
-        var embed = await dartcordEmbed(fields: [
+        var embed = await d_embed(fields: [
           EmbedFieldBuilder(
             name: "Behold",
             value: "The Variant!",

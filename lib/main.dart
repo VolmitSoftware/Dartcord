@@ -23,9 +23,10 @@ import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/services/ai/openai_manager.dart';
+import 'package:running_on_dart/utils/dartcord/bot_data.dart';
 
 import 'commands/autocrat.dart';
-import 'configurator.dart';
+import 'package:running_on_dart/bot_cfg.dart';
 import 'listeners/dictator.dart';
 
 late NyxxGateway nyxxBotClient;
@@ -35,7 +36,7 @@ Future<void> initializeConfig() async {
   var configFile = File('config.json');
   var contents = await configFile.readAsString();
   Map<String, dynamic> configData = json.decode(contents);
-  Configurator.fromJson(configData);
+  BotCFG.fromJson(configData);
 }
 
 void main() async {
@@ -44,7 +45,7 @@ void main() async {
   final commands = CommandsPlugin(prefix: mentionOr((_) => '!'));
   autocrat(commands); // Load al
   verbose("Loaded commands");
-  var discordToken = Configurator.instance.discordToken;
+  var discordToken = BotCFG.i.discordToken;
   nyxxBotClient = await Nyxx.connectGateway(discordToken,
       GatewayIntents.allUnprivileged | GatewayIntents.messageContent,
       options:
@@ -54,5 +55,11 @@ void main() async {
   verbose("Fetched bot user");
   registerListeners(nyxxBotClient, commands); // Load all Listeners
   verbose("Loaded listeners");
-  OpenAIManager.instance.initialize(Configurator.instance.openAiToken);
+  OpenAIManager.instance.initialize(BotCFG.i.openAiToken);
+  var botData = await BotData.loadFromFile();
+  botData.lastStartTime = DateTime.now().toString();
+  await botData.saveToFile();
+  success("But started at: " +
+      DateTime.now().toString() +
+      ", Updating bot chronologically");
 }
