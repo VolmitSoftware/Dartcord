@@ -31,14 +31,20 @@ class DUtil {
     // verbose("Checking if $entity is a bot."); // Uncomment this line to see if the function is being called, because its spammy but extremely useful for debugging
     switch (entity.runtimeType) {
       case User:
-        return (entity as User).isBot;
+        verbose((entity as User).isBot
+            ? "User ${entity.username} is a bot"
+            : "User ${entity.username} is not a bot");
+        return (entity).isBot;
       case Member:
         return isBot((entity as Member).id);
       case Snowflake:
-        User user = await nyxxBotClient.user.manager.get(entity as Snowflake);
-        return user.isBot;
+        return isBot(await nyxxBotClient.user.manager.get(entity as Snowflake));
       case Message:
         return isBot((entity as MessageCreateEvent).message.author.id);
+      case Webhook:
+        return true;
+      case WebhookAuthor:
+        return true;
       default:
         error("Unknown entity type: ${entity.runtimeType}");
         return false;
@@ -65,8 +71,10 @@ class DUtil {
         return (entity as Snowflake).toString();
       case Message:
         return (entity as MessageCreateEvent).message.id.toString();
+      case WebhookAuthor:
+        return (entity as WebhookAuthor).id.toString();
       default:
-        error("Unknown entity type: ${entity.runtimeType}");
+        error("Unknown entity type{Arbitrary}: ${entity.runtimeType}");
         return "";
     }
   }

@@ -25,7 +25,9 @@ import 'package:running_on_dart/utils/nyxx_betterment/d_util.dart';
 void onMessageXPAwardListener(NyxxGateway client) {
   verbose("Registering XP award listener");
   client.onMessageCreate.listen((event) async {
-    if (!await DUtil.isBot(event.message.author)) {
+    if (await DUtil.isBot(event.message.author)) {
+      return;
+    } else {
       var userId = event.message.author.id;
       var userData = await DataUtil.getUserData(userId);
 

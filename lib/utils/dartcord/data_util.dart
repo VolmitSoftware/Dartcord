@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:nyxx/nyxx.dart';
 
+import '../nyxx_betterment/d_util.dart';
+
 class DataUtil {
   static String dataPath() {
     return "./Data/";
@@ -24,6 +26,11 @@ class DataUtil {
 
   static Future<void> saveUserData(
       Snowflake userId, Map<String, dynamic> data) async {
+    //check if its a bot user
+    if (await DUtil.isBot(userId)) {
+      return;
+    }
+
     var file = File(userFilePath(userId));
     await file.writeAsString(json.encode(data));
   }

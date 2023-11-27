@@ -40,11 +40,11 @@ class DMessage {
     }
   }
 
-  /// Deletes a message and returns the author of the message.
+  /// Deletes a message and returns a boolean indicating success.
   ///
   /// Accepts [message] which is the message to be deleted.
   ///
-  /// Returns the author of the message if successful, otherwise `null`.
+  /// Returns `true` if successful, otherwise `false`.
   static Future<bool> deleteMessage(Message message) async {
     try {
       verbose("Deleting message from channel: ${message.channel.id}");
