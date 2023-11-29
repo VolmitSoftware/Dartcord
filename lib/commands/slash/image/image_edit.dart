@@ -114,7 +114,8 @@ final image_edit = ChatCommand(
       image: convertedFile,
       prompt: prompt ??
           'With a lot of cats all over the place doing various things',
-      n: 1, // Requesting 3 image variations
+      n: 1,
+      // Requesting 3 image variations
       size: OpenAIImageSize.size1024,
       responseFormat: OpenAIImageResponseFormat.url);
   info("Generated AI image URLs: ${imageUrls.join(', ')}");
