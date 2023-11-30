@@ -1,4 +1,4 @@
-# Dartcord - Template Bot 🚀
+# Dartcord - Template Bot 🚀 (WIP)
 
 Dartcord is a fast (🚀) Discord bot framework written in Dart. It provides an easy way to create Discord bots that can
 respond to commands, listen for events, and more.
