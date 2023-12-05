@@ -22,6 +22,7 @@ dependencies:
 #      ref: dev
   nyxx_commands: ^6.0.2
   nyxx_extensions: ^4.1.0
+  toxic: ^1.0.3
 
 
 dev_dependencies:
