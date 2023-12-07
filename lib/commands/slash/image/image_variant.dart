@@ -23,9 +23,9 @@ import 'package:fast_log/fast_log.dart';
 import 'package:http/http.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/services/ai/openai_manager.dart';
 import 'package:running_on_dart/utils/dartcord/image_manipulation.dart';
 import 'package:running_on_dart/utils/nyxx_betterment/e_embed.dart';
+import 'package:running_on_dart/utils/services/ai/openai_manager.dart';
 
 final image_vary =
     ChatCommand('ai_image_vary', "Upload an image to see an AI remake it!",

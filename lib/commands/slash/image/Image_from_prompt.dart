@@ -20,8 +20,8 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
-import 'package:running_on_dart/services/ai/openai_manager.dart';
 import 'package:running_on_dart/utils/nyxx_betterment/e_embed.dart';
+import 'package:running_on_dart/utils/services/ai/openai_manager.dart';
 
 final image_prompt = ChatCommand('ai_image', "An image for your thoughts?",
     (ChatContext context,
