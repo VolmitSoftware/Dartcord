@@ -141,46 +141,36 @@ class DChannel {
     // Create channel based on the specified type
     try {
       verbose(
-          "Creating $channelType channel: $channelName in guild: ${guild.id}");
+          "Creating $channelType channel: $channelName in guild: ${guild.id}" +
+              (inCategory != null ? " in category: ${inCategory.name}" : ""));
       GuildChannelBuilder builder;
       GuildChannel newChannel;
 
       switch (channelType) {
         case ChannelType.guildText:
+          info("Creating text channel: $channelName");
           builder = GuildTextChannelBuilder(
               name: channelName,
               parentId: inCategory?.id,
               permissionOverwrites: [
                 PermissionOverwriteBuilder(
-                  id: await guild.roles.list().then((value) => value
-                      .firstWhere((element) => element.name == "@everyone")
-                      .id),
+                  id: everyoneRole, // This is a snowflake for a role
                   type: PermissionOverwriteType.role,
-                  allow: isPrivate ? Permissions.viewChannel : null,
-                  deny: isPrivate ? Permissions.viewChannel : null,
-                ),
+                  deny: Permissions.viewChannel,
+                )
               ]);
           break;
         case ChannelType.guildVoice:
+          info("Creating voice channel: $channelName");
           builder = GuildVoiceChannelBuilder(
-              name: channelName,
-              parentId: inCategory?.id,
-              permissionOverwrites: [
-                PermissionOverwriteBuilder(
-                  id: await guild.roles.list().then((value) => value
-                      .firstWhere((element) => element.name == "@everyone")
-                      .id),
-                  type: PermissionOverwriteType.role,
-                  allow: isPrivate ? Permissions.viewChannel : null,
-                  deny: isPrivate ? Permissions.viewChannel : null,
-                ),
-              ]);
+            name: channelName,
+            parentId: inCategory?.id,
+          );
           break;
         case ChannelType.guildCategory:
+          info("Creating category: $channelName");
           builder = GuildChannelBuilder(
-            name: channelName,
-            type: ChannelType.guildCategory,
-          );
+              name: channelName, type: ChannelType.guildCategory);
           break;
         default:
           error("Unsupported channel type: $channelType");
