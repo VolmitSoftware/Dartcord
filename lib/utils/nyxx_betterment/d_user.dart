@@ -18,45 +18,35 @@
 
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
+import 'package:running_on_dart/main.dart';
 
-class DUtil {
-  /// Checks if a given message contains variations of "im".
+class DUser {
+  /// Checks if a given entity is a bot.
   ///
-  /// [message] is the message text to be checked.
+  /// Accepts [entity] which can be a User, Member, Snowflake (ID), or Message.
   ///
-  /// Returns `true` if variations of "im" are found in the message, otherwise `false`.
-  static bool messageHas(String message) {
-    RegExp imRegex = RegExp(r"\bim\b", caseSensitive: false);
-    return imRegex.hasMatch(message);
-  }
-
-  static String getId(dynamic entity) {
+  /// Returns `true` if the entity is a bot, otherwise `false`.
+  static Future<bool> isBot(dynamic entity) async {
+    // verbose("Checking if $entity is a bot."); // Uncomment this line to see if the function is being called, because its spammy but extremely useful for debugging
     switch (entity.runtimeType) {
       case User:
-        return (entity as User).id.toString();
+        verbose((entity as User).isBot
+            ? "User ${entity.username} is a bot"
+            : "User ${entity.username} is not a bot");
+        return (entity).isBot;
       case Member:
-        return (entity as Member).id.toString();
+        return isBot((entity as Member).id);
       case Snowflake:
-        return (entity as Snowflake).toString();
+        return isBot(await nyxxBotClient.user.manager.get(entity as Snowflake));
       case Message:
-        return (entity as MessageCreateEvent).message.id.toString();
+        return isBot((entity as MessageCreateEvent).message.author.id);
+      case Webhook:
+        return true;
       case WebhookAuthor:
-        return (entity as WebhookAuthor).id.toString();
+        return true;
       default:
-        error("Unknown entity type{Arbitrary}: ${entity.runtimeType}");
-        return "";
+        error("Unknown entity type: ${entity.runtimeType}");
+        return false;
     }
-  }
-
-  static dataPath() {
-    return "./Data/";
-  }
-
-  static snowflakePath(dynamic entity) {
-    return "./Data/" + getId(entity) + "/";
-  }
-
-  static bool messageHasExact(String content, String match) {
-    return content.contains(match);
   }
 }

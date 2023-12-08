@@ -19,8 +19,8 @@
 import 'package:nyxx/nyxx.dart';
 
 class DRole {
-  static Role everyoneRole(guild) {
-    return guild.roles.list().then(
+  static Future<Role> everyoneRole(guild) async {
+    return await guild.roles.list().then(
         (value) => value.firstWhere((element) => element.name == "@everyone"));
   }
 }

@@ -51,19 +51,32 @@ final ticketCluster = ChatGroup("ticket",
             "Starting 'build-hub' command in guild: ${context.guild!.name}");
         Guild guild = await context.guild!.get();
 
-        // Creating or finding the Ticket Hub Category
-        GuildChannel? ticketHubCategory =
-            await DChannel.createCategory(guild, "TICKET CENTRAL", true);
+        // Creating or finding the Ticket Hub Category using the new createChannel method
+        GuildChannel? ticketHubCategory = await DChannel.createChannel(
+            guild,
+            "TICKET CENTRAL",
+            ChannelType.guildCategory,
+            true, // check for duplicate
+            false, // is not private
+            null // parent category
+            );
+
         if (ticketHubCategory == null) {
           error(
               "Failed to create/find 'TICKET CENTRAL' category in guild: ${guild.name}");
           return;
         }
         verbose("Ticket Hub Category '${ticketHubCategory.name}' is ready.");
+        // Creating or finding the Ticket Hub Channel using the new createChannel method
+        GuildChannel? ticketHubChannel = await DChannel.createChannel(
+            guild,
+            "ticket-hub",
+            ChannelType.guildText,
+            true, // check for duplicate
+            false, // is not private
+            ticketHubCategory as GuildCategory? // parent category
+            );
 
-        // Creating or finding the Ticket Hub Channel
-        GuildChannel? ticketHubChannel = await DChannel.createInCategory(
-            guild, "ticket-hub", ChannelType.guildText, ticketHubCategory);
         if (ticketHubChannel == null || ticketHubChannel is! TextChannel) {
           error(
               "Failed to create/find 'ticket-hub' channel in category '${ticketHubCategory.name}'.");
@@ -88,8 +101,7 @@ final ticketCluster = ChatGroup("ticket",
           ];
 
         // Send the message to the Ticket Hub Channel
-        await DMessage.sendMessageToChannel(
-            ticketHubChannel as TextChannel, message);
+        await DMessage.sendMessage(ticketHubChannel as TextChannel, message);
         verbose("Sent ticket information message to Ticket Hub Channel.");
 
         await context.respond(MessageBuilder(content: "Done!"),
@@ -99,7 +111,39 @@ final ticketCluster = ChatGroup("ticket",
         'create',
         "Create a ticket, and add the user to it.",
         (ChatContext context) async {
-          //TODO Create a ticket, and add the user to it.
+          if (context.guild == null) {
+            error("Guild is null - Cannot proceed with 'create' command.");
+            return;
+          }
+
+          Guild guild = await context.guild!.get();
+
+          // Find the Ticket Hub Category
+          var ticketHubCategory = await DChannel.findChannel(
+                  "TICKET CENTRAL", guild, ChannelType.guildCategory)
+              as GuildCategory?;
+
+          if (ticketHubCategory == null) {
+            error(
+                "Failed to find 'TICKET CENTRAL' category in guild: ${guild.name}");
+            return;
+          }
+
+          // Create the ticket channel inside the Ticket Hub Category
+          GuildChannel? ticketChannel = await DChannel.createChannel(
+              guild,
+              "ticket-0000",
+              ChannelType.guildText,
+              true, // check for duplicate
+              true, // is private
+              ticketHubCategory // parent category
+              );
+
+          if (ticketChannel == null || ticketChannel is! TextChannel) {
+            error(
+                "Failed to create 'ticket-0000' channel in category '${ticketHubCategory.name}'.");
+            return;
+          }
         },
       ),
       ChatCommand(

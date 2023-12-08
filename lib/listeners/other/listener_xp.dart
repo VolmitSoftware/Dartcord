@@ -20,12 +20,12 @@ import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:running_on_dart/bot_cfg.dart';
 import 'package:running_on_dart/utils/dartcord/user_data.dart';
-import 'package:running_on_dart/utils/nyxx_betterment/d_util.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/d_user.dart';
 
 void onMessageXPAwardListener(NyxxGateway client) {
   verbose("Registering XP award listener");
   client.onMessageCreate.listen((event) async {
-    if (await DUtil.isBot(event.message.author)) {
+    if (await DUser.isBot(event.message.author)) {
       return;
     } else {
       var userId = event.message.author.id.toString();

@@ -23,8 +23,8 @@ import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/bot_cfg.dart';
-import 'package:running_on_dart/services/ai/openai_manager.dart';
 import 'package:running_on_dart/utils/dartcord/bot_data.dart';
+import 'package:running_on_dart/utils/services/ai/openai_manager.dart';
 
 import 'commands/autocrat.dart';
 import 'listeners/dictator.dart';

@@ -18,13 +18,14 @@
 
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/d_user.dart';
 import 'package:running_on_dart/utils/nyxx_betterment/d_util.dart';
 
 void onHiMessageListener(NyxxGateway client) {
   verbose("Registering Hi message listener");
   client.onMessageCreate.listen((event) async {
     //Simplified message parsing, and bot checking!
-    if (DUtil.messageHas(event.message.content) && !await DUtil.isBot(event)) {
+    if (DUtil.messageHas(event.message.content) && !await DUser.isBot(event)) {
       await event.message.manager.create(MessageBuilder(
         content: "I'm Dartcord!",
         replyId: event.message.id,

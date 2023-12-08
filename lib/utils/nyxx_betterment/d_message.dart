@@ -18,22 +18,30 @@
 
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
+import 'package:nyxx_commands/nyxx_commands.dart';
 
 class DMessage {
-  /// Sends a message to a specified channel.
+  /// Sends a message to a specified entity (channel, ChatContext, or Message).
   ///
-  /// Accepts [channel] which is the channel where the message will be sent.
-  /// Accepts [messageBuilder] which is the message to be sent.
+  /// [entity] - Can be a TextChannel, ChatContext, or Message where the message will be sent.
+  /// [messageBuilder] - The message to be sent.
   ///
   /// Returns the sent Message if successful, otherwise `null`.
-  static Future<Message?> sendMessageToChannel(
-      TextChannel channel, MessageBuilder messageBuilder) async {
+  static Future<Message?> sendMessage(
+      dynamic entity, MessageBuilder messageBuilder) async {
     try {
-      verbose("Sending message to channel: ${channel.id}");
-      Message sentMessage = await channel.sendMessage(messageBuilder);
-      return sentMessage;
+      if (entity is TextChannel) {
+        verbose("Sending message to channel: ${entity.id}");
+        return await entity.sendMessage(messageBuilder);
+      } else if (entity is ChatContext || entity is Message) {
+        verbose("Sending message to ${entity.channel.id}");
+        return await entity.channel.sendMessage(messageBuilder);
+      } else {
+        error("Unknown entity type for sendMessage: ${entity.runtimeType}");
+        return null;
+      }
     } catch (e) {
-      error("Failed to send message to channel: ${channel.id}, Error: $e");
+      error("Error sending message: $e");
       return null;
     }
   }
