@@ -19,6 +19,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fast_log/fast_log.dart';
+
 enum BotDataField {
   activeTickets,
   totalTickets,
@@ -43,6 +45,7 @@ class BotData {
   });
 
   dynamic getField(BotDataField field) {
+    verbose("Getting bot data field: $field");
     switch (field) {
       case BotDataField.lastStartTime:
         return activeTickets;
@@ -59,10 +62,11 @@ class BotData {
     }
   }
 
-  void setField(BotDataField field, dynamic value) {
+  void setField(BotDataField field, dynamic value) async {
+    verbose("Setting bot data field: $field to $value");
     switch (field) {
       case BotDataField.lastStartTime:
-        activeTickets = value as int;
+        lastStartTime = value as String;
         break;
       case BotDataField.activeTickets:
         activeTickets = value as int;
@@ -79,19 +83,40 @@ class BotData {
       default:
         throw ArgumentError('Invalid BotDataField');
     }
+    await saveToFile();
   }
 
-  void reset() {
+  Future<void> newTicket() async {
+    verbose("New ticket created.");
+    await updateDataFromBotFile();
+    totalTickets += 1;
+    activeTickets += 1;
+    await saveToFile();
+  }
+
+  Future<void> removeTicket() async {
+    verbose("Ticket removed, decrementing active tickets.");
+    await updateDataFromBotFile();
+    if (activeTickets > 0) {
+      activeTickets -= 1;
+    }
+    await saveToFile();
+  }
+
+  void reset() async {
+    error("Bot data reset.");
     lastStartTime = '';
     activeTickets = 0;
     totalTickets = 0;
     staffChat = '';
     lockedChats = [];
+    await saveToFile();
   }
 
   static const String filePath = './Data/Bot.json';
 
   Future<void> saveToFile() async {
+    verbose("Saving bot data to file.");
     final file = File(filePath);
     final directory = file.parent;
 
@@ -110,7 +135,18 @@ class BotData {
     }));
   }
 
+  Future<void> updateDataFromBotFile() async {
+    verbose("Updating bot data from file.");
+    final botData = await loadFromFile();
+    lastStartTime = botData.lastStartTime;
+    activeTickets = botData.activeTickets;
+    totalTickets = botData.totalTickets;
+    staffChat = botData.staffChat;
+    lockedChats = botData.lockedChats;
+  }
+
   static Future<BotData> loadFromFile() async {
+    verbose("Loading bot data from file.");
     final file = File(filePath);
     if (await file.exists()) {
       final contents = await file.readAsString();

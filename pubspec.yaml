@@ -17,13 +17,14 @@ dependencies:
   http: ^1.1.2
   image: 3.0.1
   nyxx: ^6.0.3
-#    git:
-#      url: https://github.com/nyxx-discord/nyxx_commands.git
-#      ref: dev
   nyxx_commands: ^6.0.2
   nyxx_extensions: ^4.1.0
   toxic: ^1.0.3
 
 
-dev_dependencies:
+dependency_overrides: # ...but downloads dependencies specified here
+  nyxx:
+    git:
+      url: https://github.com/nyxx-discord/nyxx.git
+      ref: dev
   lints: ^3.0.0

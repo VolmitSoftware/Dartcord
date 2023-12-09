@@ -19,8 +19,77 @@
 import 'package:nyxx/nyxx.dart';
 
 class DRole {
-  static Future<Role> everyoneRole(guild) async {
+  /// This will find the default role for a guild. (@everyone)
+  ///
+  /// Accepts [guild] which is the guild to find the default role for.\
+  /// Returns a [Role] object.
+  ///
+  /// Example:
+  static Future<Role> everyoneRole({required guild}) async {
     return await guild.roles.list().then(
         (value) => value.firstWhere((element) => element.name == "@everyone"));
+  }
+
+  /// This will find the default role for a guild. (@everyone)
+  ///
+  /// Accepts [guild] which is the guild to find the default role for.\
+  /// Returns a [Snowflake] object.
+  ///
+  /// Example:
+  static Future<Snowflake> everyoneRoleID({required guild}) async {
+    return await guild.roles.list().then((value) =>
+        value.firstWhere((element) => element.name == "@everyone").id);
+  }
+
+  /// This will find a role by name in a guild.
+  ///
+  /// Accepts [guild] which is the guild to find the role in.\
+  /// Accepts [roleName] which is the name of the role to find.\
+  /// Returns a [Role] object.
+  ///
+  /// Example:
+  static Future<Role> findRoleByName(
+      {required guild, required roleName}) async {
+    return await guild.roles.list().then(
+        (value) => value.firstWhere((element) => element.name == roleName));
+  }
+
+  /// This will find a role by name in a guild.
+  ///
+  /// Accepts [guild] which is the guild to find the role in.\
+  /// Accepts [roleName] which is the name of the role to find.\
+  /// Returns a [Snowflake] object.
+  ///
+  /// Example:
+  static Future<Snowflake> findRoleByNameID(
+      {required guild, required roleName}) async {
+    return await guild.roles.list().then(
+        (value) => value.firstWhere((element) => element.name == roleName).id);
+  }
+
+  /// This will find a role by ID in a guild.
+  ///
+  /// Accepts [guild] which is the guild to find the role in.\
+  /// Accepts [roleID] which is the ID of the role to find.\
+  /// Returns a [Role] object.
+  ///
+  /// Example:
+  static Future<Role> findRoleByID({required guild, required roleID}) async {
+    return await guild.roles
+        .list()
+        .then((value) => value.firstWhere((element) => element.id == roleID));
+  }
+
+  /// This will find a role by ID in a guild.
+  ///
+  /// Accepts [guild] which is the guild to find the role in.\
+  /// Accepts [roleID] which is the ID of the role to find.\
+  /// Returns a [Snowflake] object.
+  ///
+  /// Example:
+  static Future<Snowflake> findRoleByIDID(
+      {required guild, required roleID}) async {
+    return await guild.roles.list().then(
+        (value) => value.firstWhere((element) => element.id == roleID).id);
   }
 }

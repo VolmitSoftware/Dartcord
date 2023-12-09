@@ -80,11 +80,12 @@ final image_edit = ChatCommand(
 
   // Define file paths
   String maskPath = ImageUtils.maskMapString[maskFormat]!;
-  String localFilePath = DUtil.snowflakePath(context.user) + "image.png";
+  String localFilePath =
+      DUtil.snowflakePath(entity: context.user) + "image.png";
   String convertedPath =
-      DUtil.snowflakePath(context.user) + "image-converted.png";
+      DUtil.snowflakePath(entity: context.user) + "image-converted.png";
   String convertedPathMask =
-      DUtil.snowflakePath(context.user) + "mask-converted.png";
+      DUtil.snowflakePath(entity: context.user) + "mask-converted.png";
 
   // Directory management
   var directory = Directory(localFilePath).parent;

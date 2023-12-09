@@ -25,12 +25,12 @@ class DUtil {
   /// [message] is the message text to be checked.
   ///
   /// Returns `true` if variations of "im" are found in the message, otherwise `false`.
-  static bool messageHas(String message) {
+  static bool messageHas({required String message}) {
     RegExp imRegex = RegExp(r"\bim\b", caseSensitive: false);
     return imRegex.hasMatch(message);
   }
 
-  static String getId(dynamic entity) {
+  static String getId({required dynamic entity}) {
     switch (entity.runtimeType) {
       case User:
         return (entity as User).id.toString();
@@ -52,8 +52,8 @@ class DUtil {
     return "./Data/";
   }
 
-  static snowflakePath(dynamic entity) {
-    return "./Data/" + getId(entity) + "/";
+  static snowflakePath({required dynamic entity}) {
+    return "./Data/" + getId(entity: entity) + "/";
   }
 
   static bool messageHasExact(String content, String match) {

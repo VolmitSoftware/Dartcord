@@ -26,7 +26,7 @@ class DUser {
   /// Accepts [entity] which can be a User, Member, Snowflake (ID), or Message.
   ///
   /// Returns `true` if the entity is a bot, otherwise `false`.
-  static Future<bool> isBot(dynamic entity) async {
+  static Future<bool> isBot({required dynamic entity}) async {
     // verbose("Checking if $entity is a bot."); // Uncomment this line to see if the function is being called, because its spammy but extremely useful for debugging
     switch (entity.runtimeType) {
       case User:
@@ -35,11 +35,12 @@ class DUser {
             : "User ${entity.username} is not a bot");
         return (entity).isBot;
       case Member:
-        return isBot((entity as Member).id);
+        return isBot(entity: (entity as Member).id);
       case Snowflake:
-        return isBot(await nyxxBotClient.user.manager.get(entity as Snowflake));
+        return isBot(
+            entity: await nyxxBotClient.user.manager.get(entity as Snowflake));
       case Message:
-        return isBot((entity as MessageCreateEvent).message.author.id);
+        return isBot(entity: (entity as MessageCreateEvent).message.author.id);
       case Webhook:
         return true;
       case WebhookAuthor:

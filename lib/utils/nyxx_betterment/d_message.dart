@@ -28,7 +28,7 @@ class DMessage {
   ///
   /// Returns the sent Message if successful, otherwise `null`.
   static Future<Message?> sendMessage(
-      dynamic entity, MessageBuilder messageBuilder) async {
+      {required dynamic entity, required MessageBuilder messageBuilder}) async {
     try {
       if (entity is TextChannel) {
         verbose("Sending message to channel: ${entity.id}");
@@ -51,7 +51,7 @@ class DMessage {
   /// Accepts [message] which is the message to be deleted.
   ///
   /// Returns `true` if successful, otherwise `false`.
-  static Future<bool> deleteMessage(Message message) async {
+  static Future<bool> deleteMessage({required Message message}) async {
     try {
       verbose("Deleting message from channel: ${message.channel.id}");
       await message.delete();

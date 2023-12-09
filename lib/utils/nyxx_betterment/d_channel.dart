@@ -29,15 +29,18 @@ class DChannel {
   /// [recursive] - If true and the channel is a category, recursively delete all channels within the category.
   ///
   /// Returns `true` if the deletion is successful, otherwise `false`.
-  static Future<bool> deleteChannel(Guild guild, GuildChannel channel,
-      {bool recursive = false}) async {
+  static Future<bool> deleteChannel({
+    required Guild guild,
+    required GuildChannel channel,
+    bool recursive = false,
+  }) async {
     try {
       if (channel is GuildCategory && recursive) {
         verbose("Deleting all channels in category: ${channel.id}");
         List<GuildChannel> channels = await guild.fetchChannels();
         for (var ch in channels) {
           if (ch.parentId == channel.id) {
-            await deleteChannel(guild, ch);
+            await deleteChannel(guild: guild, channel: ch);
           }
         }
       }
@@ -57,49 +60,52 @@ class DChannel {
     }
   }
 
-  /// Finds a channel by name or ID in a guild, with support for different channel types.
+  /// Finds a channel by name or ID in a guild, with support for different channel types,
+  /// and returns a Map of the channel object and its name.
   ///
   /// [channelIdentifier] - Can be a String or Snowflake (ID or name of the channel).
   /// [guild] - The guild to search the channel in.
   /// [channelType] - The type of channel to look for (text, voice, or category).
   ///
-  /// Returns the found channel if successful, otherwise `null`.
-  static Future<GuildChannel?> findChannel(
-      dynamic channelIdentifier, Guild guild, ChannelType channelType) async {
+  /// Returns a Map with the found channel as the key and channel name as the value if successful,
+  /// otherwise `null`.
+  static Future<Map<GuildChannel, String>> findChannel({
+    required dynamic channelIdentifier,
+    required Guild guild,
+    required ChannelType channelType,
+  }) async {
+    Map<GuildChannel, String> channelMap = {}; // Create an empty Map
     try {
       verbose("Searching for channel in guild: ${guild.id}");
       List<GuildChannel> channels = await guild.fetchChannels();
-
       for (var channel in channels) {
         if (channel.type != channelType) continue;
-
         bool identifierMatches = (channelIdentifier is String &&
                 channel.name == channelIdentifier) ||
             (channelIdentifier is Snowflake && channel.id == channelIdentifier);
-
-        if (!identifierMatches) continue;
-
+        // Insert channel and its name into the Map
+        if (!identifierMatches) channelMap[channel] = channel.name;
         switch (channelType) {
           case ChannelType.guildText:
-            if (channel is TextChannel) return channel;
+            if (channel is TextChannel) channelMap[channel] = channel.name;
             break;
           case ChannelType.guildVoice:
-            if (channel is VoiceChannel) return channel;
+            if (channel is VoiceChannel) channelMap[channel] = channel.name;
             break;
           case ChannelType.guildCategory:
-            if (channel is GuildCategory) return channel;
+            if (channel is GuildCategory) channelMap[channel] = channel.name;
             break;
           default:
             verbose("Unsupported channel type: $channelType");
-            return null;
+            //return an empty map
+            return channelMap;
         }
       }
-
       verbose("Channel not found");
-      return null;
+      return channelMap;
     } catch (e) {
       error("Error finding channel: $e");
-      return null;
+      return channelMap;
     }
   }
 
@@ -113,14 +119,15 @@ class DChannel {
   /// [inCategory] - The category under which the channel will be created (if applicable).
   ///
   /// Returns the created channel if successful, otherwise `null`.
-  static Future<GuildChannel?> createChannel(
-    Guild guild,
-    String channelName,
-    ChannelType channelType,
-    bool checkDuplicate,
-    bool isPrivate,
-    GuildCategory? inCategory,
-  ) async {
+  static Future<GuildChannel?> createChannel({
+    required Guild guild,
+    required String channelName,
+    required ChannelType channelType,
+    required bool checkDuplicate,
+    required bool isPrivate,
+    GuildCategory? inCategory = null,
+    List<dynamic> allowedUsers = const [],
+  }) async {
     // Check for duplicate channels if required
     if (checkDuplicate) {
       verbose(
@@ -136,7 +143,28 @@ class DChannel {
 
     // Prepare permission overwrites for privacy if required
     Snowflake everyoneRole =
-        await DRole.everyoneRole(guild).then((value) => value.id);
+        await DRole.everyoneRole(guild: guild).then((value) => value.id);
+
+    List<PermissionOverwriteBuilder> permissionOverwrites = [
+      PermissionOverwriteBuilder(
+        id: everyoneRole, // This is a snowflake for a role
+        type: PermissionOverwriteType.role,
+        deny: Permissions.viewChannel,
+      )
+    ];
+
+    // Add permission overwrite for the specified users
+    for (var user in allowedUsers) {
+      permissionOverwrites.add(PermissionOverwriteBuilder(
+        id: user is User
+            ? user.id
+            : user is Snowflake
+                ? user
+                : user.id,
+        type: PermissionOverwriteType.member,
+        allow: Permissions.viewChannel,
+      ));
+    }
 
     // Create channel based on the specified type
     try {
@@ -152,13 +180,7 @@ class DChannel {
           builder = GuildTextChannelBuilder(
               name: channelName,
               parentId: inCategory?.id,
-              permissionOverwrites: [
-                PermissionOverwriteBuilder(
-                  id: everyoneRole, // This is a snowflake for a role
-                  type: PermissionOverwriteType.role,
-                  deny: Permissions.viewChannel,
-                )
-              ]);
+              permissionOverwrites: permissionOverwrites);
           break;
         case ChannelType.guildVoice:
           info("Creating voice channel: $channelName");

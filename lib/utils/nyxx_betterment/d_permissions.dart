@@ -16,21 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'package:fast_log/fast_log.dart';
-import 'package:nyxx/nyxx.dart';
-import 'package:running_on_dart/utils/nyxx_betterment/d_user.dart';
-import 'package:running_on_dart/utils/nyxx_betterment/d_util.dart';
-
-void onHiMessageListener(NyxxGateway client) {
-  verbose("Registering Hi message listener");
-  client.onMessageCreate.listen((event) async {
-    //Simplified message parsing, and bot checking!
-    if (DUtil.messageHas(message: event.message.content) &&
-        !await DUser.isBot(entity: event)) {
-      await event.message.manager.create(MessageBuilder(
-        content: "I'm Dartcord!",
-        replyId: event.message.id,
-      ));
-    }
-  });
+class DPerms {
+  /// Add a user to a channel (edit the permissions to allow a user to read a channel)
+  ///
+  /// Accepts [user] which is the user to add to the channel.
+  /// Accepts [channel] which is the channel to add the user to.
+  ///
+  /// Returns `true` if successful, otherwise `false`.
+  ///
 }

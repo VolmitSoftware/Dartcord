@@ -330,7 +330,7 @@ packages:
     source: hosted
     version: "4.8.1"
   lints:
-    dependency: "direct dev"
+    dependency: "direct overridden"
     description:
       name: lints
       sha256: cbf8d4b858bb0134ef3ef87841abdf8d63bfc255c266b7bf6b39daa1085c4290
@@ -372,10 +372,11 @@ packages:
   nyxx:
     dependency: "direct main"
     description:
-      name: nyxx
-      sha256: "665cc368583eb066cff37bac5ef8dd0a9665f9b276ba363872443a1f78e08cef"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: dev
+      resolved-ref: "57ce193445f9b95304eb9771a9e44a165e423138"
+      url: "https://github.com/nyxx-discord/nyxx.git"
+    source: git
     version: "6.0.3"
   nyxx_commands:
     dependency: "direct main"
