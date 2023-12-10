@@ -26,7 +26,8 @@ enum BotDataField {
   totalTickets,
   staffChat,
   lockedChats,
-  lastStartTime
+  lastStartTime,
+  ticketCountMap
 }
 
 class BotData {
@@ -35,6 +36,7 @@ class BotData {
   int totalTickets;
   String staffChat;
   List<String> lockedChats;
+  Map<String, int> ticketCountMap;
 
   BotData({
     this.lastStartTime = '',
@@ -42,6 +44,7 @@ class BotData {
     this.totalTickets = 0,
     this.staffChat = '',
     this.lockedChats = const [],
+    this.ticketCountMap = const {},
   });
 
   dynamic getField(BotDataField field) {
@@ -57,8 +60,27 @@ class BotData {
         return staffChat;
       case BotDataField.lockedChats:
         return lockedChats;
+      case BotDataField.ticketCountMap:
+        return ticketCountMap;
       default:
         throw ArgumentError('Invalid BotDataField');
+    }
+  }
+
+  void incrementTickets() {
+    activeTickets++;
+    totalTickets++;
+  }
+
+  void decrementTickets() {
+    activeTickets--;
+  }
+
+  void updateTicketCountMapKey(String key, [int valueToAdd = 1]) {
+    if (ticketCountMap.containsKey(key)) {
+      ticketCountMap[key] = ticketCountMap[key]! + valueToAdd;
+    } else {
+      ticketCountMap[key] = valueToAdd;
     }
   }
 
@@ -78,27 +100,13 @@ class BotData {
         staffChat = value as String;
         break;
       case BotDataField.lockedChats:
-        lockedChats = value as List<String>;
+        lockedChats = value == null ? [] : List<String>.from(value);
+        break;
+      case BotDataField.ticketCountMap:
+        ticketCountMap = value == null ? {} : Map<String, int>.from(value);
         break;
       default:
         throw ArgumentError('Invalid BotDataField');
-    }
-    await saveToFile();
-  }
-
-  Future<void> newTicket() async {
-    verbose("New ticket created.");
-    await updateDataFromBotFile();
-    totalTickets += 1;
-    activeTickets += 1;
-    await saveToFile();
-  }
-
-  Future<void> removeTicket() async {
-    verbose("Ticket removed, decrementing active tickets.");
-    await updateDataFromBotFile();
-    if (activeTickets > 0) {
-      activeTickets -= 1;
     }
     await saveToFile();
   }
@@ -109,7 +117,8 @@ class BotData {
     activeTickets = 0;
     totalTickets = 0;
     staffChat = '';
-    lockedChats = [];
+    lockedChats = List.of([]);
+    ticketCountMap = Map.of({});
     await saveToFile();
   }
 
@@ -132,17 +141,8 @@ class BotData {
       'totalTickets': totalTickets,
       'staffChat': staffChat,
       'lockedChats': lockedChats,
+      'ticketCountMap': ticketCountMap,
     }));
-  }
-
-  Future<void> updateDataFromBotFile() async {
-    verbose("Updating bot data from file.");
-    final botData = await loadFromFile();
-    lastStartTime = botData.lastStartTime;
-    activeTickets = botData.activeTickets;
-    totalTickets = botData.totalTickets;
-    staffChat = botData.staffChat;
-    lockedChats = botData.lockedChats;
   }
 
   static Future<BotData> loadFromFile() async {
@@ -156,7 +156,12 @@ class BotData {
         activeTickets: jsonData['activeTickets'],
         totalTickets: jsonData['totalTickets'],
         staffChat: jsonData['staffChat'],
-        lockedChats: List<String>.from(jsonData['lockedChats']),
+        lockedChats: jsonData['lockedChats'] == null
+            ? []
+            : List<String>.from(jsonData['lockedChats']),
+        ticketCountMap: jsonData['ticketCountMap'] == null
+            ? {}
+            : Map<String, int>.from(jsonData['ticketCountMap']),
       );
     }
     return BotData();

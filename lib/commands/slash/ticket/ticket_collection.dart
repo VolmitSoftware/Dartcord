@@ -116,11 +116,18 @@ final ticketCluster = ChatGroup("ticket",
 
           Guild guild = await context.guild!.get();
 
-          // Find the Ticket Hub Category
-          var ticketHubCategory = await DChannel.findChannel(
-              channelIdentifier: "TICKET CENTRAL",
-              guild: guild,
-              channelType: ChannelType.guildCategory) as GuildCategory?;
+// Find the Ticket Hub Category
+          var channels = await guild.fetchChannels();
+          GuildCategory? ticketHubCategory;
+
+          for (var channel in channels) {
+            // Check if the channel is of type GuildCategory and if the name of the channel is "TICKET CENTRAL"
+            if (channel.type == ChannelType.guildCategory &&
+                channel.name == "TICKET CENTRAL") {
+              ticketHubCategory = channel as GuildCategory?;
+              break;
+            }
+          }
 
           if (ticketHubCategory == null) {
             error(

@@ -69,43 +69,25 @@ class DChannel {
   ///
   /// Returns a Map with the found channel as the key and channel name as the value if successful,
   /// otherwise `null`.
-  static Future<Map<GuildChannel, String>> findChannel({
-    required dynamic channelIdentifier,
+  static Future<GuildChannel?> findChannelById({
+    required Snowflake channelId,
     required Guild guild,
     required ChannelType channelType,
   }) async {
-    Map<GuildChannel, String> channelMap = {}; // Create an empty Map
     try {
       verbose("Searching for channel in guild: ${guild.id}");
       List<GuildChannel> channels = await guild.fetchChannels();
       for (var channel in channels) {
-        if (channel.type != channelType) continue;
-        bool identifierMatches = (channelIdentifier is String &&
-                channel.name == channelIdentifier) ||
-            (channelIdentifier is Snowflake && channel.id == channelIdentifier);
-        // Insert channel and its name into the Map
-        if (!identifierMatches) channelMap[channel] = channel.name;
-        switch (channelType) {
-          case ChannelType.guildText:
-            if (channel is TextChannel) channelMap[channel] = channel.name;
-            break;
-          case ChannelType.guildVoice:
-            if (channel is VoiceChannel) channelMap[channel] = channel.name;
-            break;
-          case ChannelType.guildCategory:
-            if (channel is GuildCategory) channelMap[channel] = channel.name;
-            break;
-          default:
-            verbose("Unsupported channel type: $channelType");
-            //return an empty map
-            return channelMap;
+        // Check if the channel type matches the required type
+        if (channel.id == channelId && channel.type == channelType) {
+          return channel;
         }
       }
       verbose("Channel not found");
-      return channelMap;
+      return null;
     } catch (e) {
       error("Error finding channel: $e");
-      return channelMap;
+      return null;
     }
   }
 
