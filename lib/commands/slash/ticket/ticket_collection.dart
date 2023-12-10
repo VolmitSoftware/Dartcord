@@ -16,13 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import 'dart:ffi';
-
 import 'package:fast_log/fast_log.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_commands/nyxx_commands.dart';
 import 'package:running_on_dart/utils/nyxx_betterment/d_channel.dart';
 import 'package:running_on_dart/utils/nyxx_betterment/d_message.dart';
+import 'package:running_on_dart/utils/nyxx_betterment/d_permissions.dart';
 import 'package:running_on_dart/utils/prefab/embed.dart';
 
 /*
@@ -56,8 +55,8 @@ final ticketCluster = ChatGroup("ticket",
           guild: guild,
           channelName: "TICKET CENTRAL",
           channelType: ChannelType.guildCategory,
-          checkDuplicate: true, // check for duplicate
-          isPrivate: false, // is not private
+          checkDuplicate: true,
+          isPrivate: false,
         );
 
         if (ticketHubCategory == null) {
@@ -71,10 +70,9 @@ final ticketCluster = ChatGroup("ticket",
             guild: guild,
             channelName: "ticket-hub",
             channelType: ChannelType.guildText,
-            checkDuplicate: true, // check for duplicate
-            isPrivate: false, // is not private
-            inCategory: ticketHubCategory as GuildCategory? // parent category
-            );
+            checkDuplicate: true,
+            isPrivate: false,
+            inCategory: ticketHubCategory as GuildCategory?);
 
         if (ticketHubChannel == null || ticketHubChannel is! TextChannel) {
           error(
@@ -135,10 +133,10 @@ final ticketCluster = ChatGroup("ticket",
               guild: guild,
               channelName: "ticket-0000",
               channelType: ChannelType.guildText,
-              checkDuplicate: true, // check for duplicate
-              isPrivate: true, // is private
-              inCategory: ticketHubCategory // parent category
-              );
+              checkDuplicate: true,
+              isPrivate: true,
+              allowedUsers: List.of([context.member!.id]),
+              inCategory: ticketHubCategory);
 
           if (ticketChannel == null || ticketChannel is! TextChannel) {
             error(
@@ -153,15 +151,60 @@ final ticketCluster = ChatGroup("ticket",
         (
           ChatContext context, [
           @Choices({
-            'Add': "true",
-            'Remove': "false",
+            'Add': "Add",
+            'Remove': "Remove",
           })
           @Description('Add or Remove a user from a ticket.')
-          Bool? selection,
+          String? function,
           @Description('The user to add or remove. (Right-click Copy ID)')
           String? userId,
         ]) async {
-          //TODO Add a user to a ticket.
+          verbose("Started command 'users' in guild: ${context.guild!.name}");
+          if (userId == null) {
+            context.respond(
+                MessageBuilder(
+                    content:
+                        "You need to properly provide the USERID, enable developer mode if you need to."),
+                level: ResponseLevel(
+                    hideInteraction: true,
+                    isDm: false,
+                    mention: true,
+                    preserveComponentMessages: true));
+          }
+          int userIdInt = int.parse(userId!);
+          var snowflake = await context.guild!.members
+              .fetch(Snowflake(userIdInt))
+              .then((value) => value.id);
+          if (function.toString() == "Add") {
+            if (await DPerms.channelPermAddUser(
+                permission: Permissions.viewChannel,
+                userSnowflake: snowflake,
+                channel: context.channel)) {
+              context.respond(
+                  MessageBuilder(
+                      content:
+                          "This went well. Added them to be able to view."),
+                  level: ResponseLevel(
+                      hideInteraction: true,
+                      isDm: false,
+                      mention: true,
+                      preserveComponentMessages: true));
+            }
+          } else {
+            if (await DPerms.channelPermRemoveUser(
+                permission: Permissions.viewChannel,
+                userSnowflake: snowflake,
+                channel: context.channel)) {
+              context.respond(
+                  MessageBuilder(
+                      content: "This went well. Removed view access"),
+                  level: ResponseLevel(
+                      hideInteraction: true,
+                      isDm: false,
+                      mention: true,
+                      preserveComponentMessages: true));
+            }
+          }
         },
       ),
       ChatCommand(
